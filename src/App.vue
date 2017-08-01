@@ -67,13 +67,14 @@
   }
 }, -->
 <style>
-*{margin: 0;padding: 0;}
-body,html{font-size: 12px;font-family: "微软雅黑";}
-.rottatec{display: flex;}
-.left{flex: 0.15;background-color: #324157;}
-.right{flex: 0.85;}
-@media print {
-  .Noprint { display: none }
-  .PageNext{ page-break-after: always }
-}
+  *{margin: 0;padding: 0;}
+  body,html{font-size: 12px;font-family: "微软雅黑";box-sizing: border-box;position: absolute;left: 0;right: 0;top: 0; bottom: 0;height: 100%}
+  .rottatec{display: flex;height:100%;}
+  #app{height: 100%}
+  .left{width: 15%;background-color: #324157;overflow-x: scroll}
+  .right{width: 85%;overflow-x: scroll;position: relative;top: 0;left: 0;right: 0;bottom: 0}
+  @media print {
+    .Noprint { display: none }
+    .PageNext{ page-break-after: always }
+  }
 </style>
