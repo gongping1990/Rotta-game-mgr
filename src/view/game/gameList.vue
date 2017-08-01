@@ -15,7 +15,7 @@
         </el-table-column>
         <el-table-column label="分类" prop="gameType" :formatter="getType" align="center">
         </el-table-column>
-        <el-table-column label="所属运营商" prop="company" align="center">
+        <el-table-column label="所属运营商" prop="company.companyName" align="center">
         </el-table-column>
         <!--<el-table-column label="游戏消耗总点数" prop="points" align="center">-->
         <!--</el-table-column>-->

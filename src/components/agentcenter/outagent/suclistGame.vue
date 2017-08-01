@@ -6,7 +6,7 @@
       </el-row>
       <el-row>
         <el-col :span="8">
-          <span class="print-justfy1">所属运营商 : {{suclist.company}}</span>
+          <span class="print-justfy1">所属运营商 : {{suclist.company.companyName}}</span>
         </el-col>
         <el-col :span="8">
           <span class="print-justfy1">游戏服务器 : {{suclist.ip}}</span>

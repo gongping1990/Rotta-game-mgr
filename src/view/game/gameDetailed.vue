@@ -7,7 +7,7 @@
       </el-breadcrumb>
     </div>
     <div class="my-title">
-      <h2>{{gameReadyDetail.company}}</h2>
+      <h2>{{gameReadyDetail.company.companyName}}</h2>
     </div>
     <Gamedetailform></Gamedetailform>
   </div>

@@ -9,67 +9,70 @@
 </template>
 
 <script type="text/ecmascript-6">
-import { invoke } from '@/libs/fetchLib'
-import { api } from '@/libs/fetchConfig'
-export default {
-  name: 'successbtn',
-  props: ['hash', 'detail'],
-  methods: {
-    backlist () {
-      this.$router.push(this.hash)
-      this.$store.commit({
-        type: 'changeindex',
-        data: this.hash
-      })
-    },
-    checklist () {
-      this.$router.push(this.detail)
-      this.$store.commit({
-        type: 'changeindex',
-        data: this.detail
-      })
-      if (this.detail === 'operatordetail') {
-        var row = this.$store.state.getSuccessOperator
-        invoke({
-          url: api.companyOne.url + '/' + row.companyName + '/' + row.companyId,
-          method: api.companyOne.method
-        }).then((data) => {
-          let [err, res] = data
-          if (err) {
-
-          } else {
-            this.$store.commit({
-              type: 'gameDetailInfo',
-              data: res.data.payload
-            })
-          }
+  import { invoke } from '@/libs/fetchLib'
+  import { api } from '@/libs/fetchConfig'
+  export default {
+    name: 'successbtn',
+    props: ['hash', 'detail'],
+    methods: {
+      backlist () {
+        this.$router.push(this.hash)
+        this.$store.commit({
+          type: 'changeindex',
+          data: this.hash
         })
-      } else {
-        var rows = this.$store.state.getSuccessGame
-        invoke({
-          url: api.gameOne.url + '/' + rows.gameType + '/' + rows.gameId,
-          method: api.gameOne.method
-        }).then((data) => {
-          let [err, res] = data
-          if (err) {
-
-          } else {
-            this.$store.commit({
-              type: 'gameReadyDetailInfo',
-              data: res.data.payload
-            })
-          }
+      },
+      checklist () {
+        this.$router.push(this.detail)
+        this.$store.commit({
+          type: 'changeindex',
+          data: this.detail
         })
+        this.$store.commit('startLoading')
+        if (this.detail === 'operatordetail') {
+          var row = this.$store.state.getSuccessOperator
+          invoke({
+            url: api.companyOne.url + '/' + row.companyName + '/' + row.companyId,
+            method: api.companyOne.method
+          }).then((data) => {
+            let [err, res] = data
+            if (err) {
+
+            } else {
+              this.$store.commit({
+                type: 'gameDetailInfo',
+                data: res.data.payload
+              })
+            }
+            this.$store.commit('closeLoading')
+          })
+        } else {
+          var rows = this.$store.state.getSuccessGame
+          invoke({
+            url: api.gameOne.url + '/' + rows.gameType + '/' + rows.gameId,
+            method: api.gameOne.method
+          }).then((data) => {
+            let [err, res] = data
+            if (err) {
+
+            } else {
+              this.$store.commit({
+                type: 'gameReadyDetailInfo',
+                data: res.data.payload
+              })
+            }
+            this.$store.commit('closeLoading')
+          })
+        }
+      },
+      printList () {
+        window.print()
       }
-    },
-    printList () {
-      window.print()
     }
   }
-}
 </script>
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-.successbtn{margin-left: -4rem;padding: 2rem 0;}
-.justfy1{margin:0 7%;}
+  .successbtn{margin-left: -4rem;padding: 2rem 0;}
+  .justfy1{margin:0 7%;}
 </style>

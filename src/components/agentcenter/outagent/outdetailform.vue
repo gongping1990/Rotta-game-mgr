@@ -58,7 +58,7 @@ export default {
 
 <style scoped>
     .manangeform span,
-    .simpleform{ background-color: #f5f5f5; padding: 1.5rem 2rem}
+    .simpleform{ background-color: #f5f5f5; padding: 1.5rem 2rem;color:#8e8e8e}
     .simpleform span{display: inline-block;padding: 2rem 1.5rem 1.5rem 2rem;}
     h4{font-size: 1.8rem;font-weight: normal;padding: 2rem 0;color: #5a5a5a}
     .outdetailform{width: 98%; margin: 0 auto;  vertical-align: baseline;}
