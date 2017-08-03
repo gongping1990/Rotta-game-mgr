@@ -41,10 +41,10 @@
             </el-tag>
           </template>
         </el-table-column>
-        <el-table-column label="备注" align="center">
+        <el-table-column label="备注" align="center" >
           <template scope="scope">
             <el-popover trigger="hover" placement="bottom-start" width="250">
-              <p>{{ scope.row.remark }}</p>
+              <p>{{ scope.row.remark === 'NULL!' ? '' : scope.row.remark}}</p>
               <div slot="reference" class="">
                 <el-icon name="search" style="color:#108ee9"></el-icon>
               </div>
@@ -60,7 +60,6 @@
       <div class="page">
         <el-pagination layout="prev, pager, next, sizes, jumper" :total="propList.length"
                        :page-sizes="[5, 10]" :page-size="nowSize" @size-change="getNowsize" @current-change="getNowpage">
-
         </el-pagination>
       </div>
     </div>
@@ -76,7 +75,7 @@
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button @click="this.isAddProp = false">取 消</el-button>
+        <el-button @click="isAddProp = false">取 消</el-button>
         <el-button type="primary" :load="isSending" @click="submitProp()">{{isSending ? '提交中' : '确 定'}}</el-button>
       </div>
     </el-dialog>
