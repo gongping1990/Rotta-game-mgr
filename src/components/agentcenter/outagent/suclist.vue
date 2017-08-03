@@ -9,7 +9,7 @@
           <span class="print-justfy1">代理商ID : {{suclist.companyId}}</span>
         </el-col>
         <el-col :span="6">
-          <span class="print-justfy1">联系人 : {{suclist.license}}</span>
+          <span class="print-justfy1">联系人 : {{suclist.companyContact}}</span>
         </el-col>
         <el-col :span="6">
           <span class="print-justfy1">联系方式 : {{suclist.companyContactWay}}</span><br>
@@ -69,7 +69,7 @@ export default {
 .list-title p{line-height: 3rem;font-size: 1.1rem;color: #5a5a5a;}
 .list-title .title{font-size: 1.3rem;font-weight: bold;color: #5a5a5a}
 
-.list-form{border: 1px dashed #222222;padding: 1rem 2rem;margin: 2rem 1rem;}
+.list-form{border: 1px dashed #222222;padding: 1rem 2rem;}
 .list-form p{line-height: 3rem;font-size: 1rem;}
 .list-bottom{text-align: right;}
 .list-bottom p{margin: 1rem;padding-top: 1rem;color: #5a5a5a;}

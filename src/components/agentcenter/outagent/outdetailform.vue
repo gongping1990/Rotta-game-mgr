@@ -8,7 +8,7 @@
             <span>运营商ID: {{gameDetail.companyId}}</span>
           </el-col>
           <el-col :span="8">
-            <span>联系人: {{gameDetail.license}}</span>
+            <span>联系人: {{gameDetail.companyContact}}</span>
           </el-col>
            <el-col :span="8">
              <span>联系方式: {{gameDetail.companyContactWay}}</span>

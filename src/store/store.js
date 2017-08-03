@@ -16,11 +16,6 @@ const COMLISTDATA = 'comListData' // 一般代理商原始据
 const NOWINDEX = 'nowindex' // 路由跳转
 const NOWOUTACTIVE = 'nowoutactive' // 创建出口代理商步骤条
 const NOWCOMACTIVE = 'nowcomactive' // 创建出口代理商步骤条
-const CREATEMERCHANT = 'createMerchant' // 创建一般商户
-const RANDOMPASSWORD = 'randomPassword' // 随机生成密码
-const RANDOMMSN = 'randomMsn' // 随机生成线路号
-const SUCOUTREGIST = 'sucOutregist' // 出口代理商成功注册返回数据
-const SUCCOMREGIST = 'sucComregist' // 一般商户成功注册返回数据
 const SEARCHID = 'searchID' // 搜索详细数据的用户ID
 const OUTDETAIL = 'outdetail' // 出口代理商详细数据
 const COMDETAIL = 'comdetail' // 一般商户详细数据
@@ -32,16 +27,9 @@ const NOWARRAY = 'nowarray' // 当前打开数组
 const SEARCHCONDITION = 'searchcondition' // 搜索条件
 const OUTLISTSEARCH = 'outlistSearch' // 处理代理商列表
 const COMLISTSEARCH = 'gamelistSearch' // 处理游戏列表
-/* 财务信息数据 */
-const PROPERTY = 'property' // 账户余额
-const WATERFALL = 'waterfall' // 账户流水
 /* 管理员信息 */
 const ADMININFO = 'adminInfo' // 管理员信息
 const ADMINLIST = 'adminList' // 管理员列表
-/* 商户号列表 */
-const MSNLIST = 'msnList' // 线路号列表
-const COPYMSNLIST = 'copymsnList' // 线路号列表备份
-const SEARCHMSN = 'searchMSN' // 搜索的线路号
 /**/
 const MANAGERLOGINLIST = 'managerloginList' // 线路商登陆日志
 const MERCHANTLOGINLIST = 'merchantloginList' // 一般商户登陆日志
@@ -54,22 +42,6 @@ const GET_SEARCH_GAME = 'getSearchGame' // 获取游戏的搜索条件
 const OPERATOR_LIST = 'operatorList' // 游戏商列表数据
 const state = {
   [ISAPI]: {
-    createAdmin: {
-      url: 'https://viwko4gvx0.execute-api.ap-southeast-1.amazonaws.com/dev/admins',
-      method: 'post'
-    }, // 创建管理员账号 admins
-    adminCenter: {
-      url: 'https://viwko4gvx0.execute-api.ap-southeast-1.amazonaws.com/dev/admin_center',
-      method: 'get'
-    }, // 商户个人中心
-    createUser: {
-      url: 'https://viwko4gvx0.execute-api.ap-southeast-1.amazonaws.com/dev/users',
-      method: 'post'
-    }, // 创建线路商与一般商户 users
-    randomPassword: {
-      url: 'https://viwko4gvx0.execute-api.ap-southeast-1.amazonaws.com/dev/random_password',
-      method: 'post'
-    }, // 随机生成密码 random_password
     randomCaptcha: {
       url: 'https://viwko4gvx0.execute-api.ap-southeast-1.amazonaws.com/dev/captcha',
       method: 'post'
@@ -86,30 +58,6 @@ const state = {
       url: 'https://viwko4gvx0.execute-api.ap-southeast-1.amazonaws.com/dev/merchants',
       method: 'get'
     }, // 一般商户查询与修改 merchants / merchants/userID
-    userStatus: {
-      url: 'https://viwko4gvx0.execute-api.ap-southeast-1.amazonaws.com/dev/userChangeStatus',
-      method: 'post'
-    }, // 变更用户状态 userChangeStatus
-    checkMSN: {
-      url: 'https://viwko4gvx0.execute-api.ap-southeast-1.amazonaws.com/dev/check_msn',
-      method: 'get'
-    }, // 检查线路号是否可用 // check_msn/{msn}
-    msnLock: {
-      url: 'https://viwko4gvx0.execute-api.ap-southeast-1.amazonaws.com/dev/lockmsn',
-      method: 'get'
-    }, // 锁定解锁线路号 lockmsn/{msn}/{status}
-    msnList: {
-      url: 'https://viwko4gvx0.execute-api.ap-southeast-1.amazonaws.com/dev/msnList',
-      method: 'post'
-    }, // 获取线路号列表 msnList
-    randomMSN: {
-      url: 'https://viwko4gvx0.execute-api.ap-southeast-1.amazonaws.com/dev/msnRandom',
-      method: 'get'
-    }, // 获取随机线路号 msnRandom
-    parentList: {
-      url: 'https://viwko4gvx0.execute-api.ap-southeast-1.amazonaws.com/dev/avalible_managers',
-      method: 'get'
-    }, // 获取可用上级线路商/直属列表 avalible_managers
     addGame: {
       url: 'https://e73xksjd1k.execute-api.ap-southeast-1.amazonaws.com/dev/games',
       method: 'post'
@@ -118,22 +66,6 @@ const state = {
       url: 'https://e73xksjd1k.execute-api.ap-southeast-1.amazonaws.com/dev/gameList',
       method: 'post'
     }, // 获取游戏列表 games/{type}
-    billTransfer: {
-      url: 'https://e73xksjd1k.execute-api.ap-southeast-1.amazonaws.com/dev/billTransfer',
-      method: 'post'
-    }, // 存点取点
-    bills: {
-      url: 'https://e73xksjd1k.execute-api.ap-southeast-1.amazonaws.com/dev/bills',
-      method: 'get'
-    }, // 查询某用户点数余额 bills/{userID}
-    waterFall: {
-      url: 'https://e73xksjd1k.execute-api.ap-southeast-1.amazonaws.com/dev/waterfall',
-      method: 'get'
-    }, // 查询某用户账单流水 waterfall/{userID}
-    loginList: {
-      url: 'https://e73xksjd1k.execute-api.ap-southeast-1.amazonaws.com/dev/logList',
-      method: 'post'
-    }, // 登录日志
     addCompanyNew: {
       url: 'https://e73xksjd1k.execute-api.ap-southeast-1.amazonaws.com/dev/companyNew',
       method: 'post'
@@ -150,14 +82,9 @@ const state = {
     captcha: '' // 验证码
   }, // 用户登录信息
   [FORMPARENT]: [],
-  [RANDOMPASSWORD]: '',
-  [RANDOMMSN]: '',
   [GAMELIST]: [],
   [ADMININFO]: [],
   [ADMINLIST]: [],
-  [MSNLIST]: [],
-  [COPYMSNLIST]: [],
-  [SEARCHMSN]: '',
   /* 所在页面 */
   [NOWSEARCHINDEX]: '',
   [NOWARRAY]: [1, 2],
@@ -170,8 +97,6 @@ const state = {
   [OUTDETAIL]: {},
   [COMDETAIL]: {},
   [ISEDIT]: false,
-  [PROPERTY]: '',
-  [WATERFALL]: [],
   /* 搜索条件 */
   [SEARCHCONDITION]: {
     companyContactWay: '', // 联系方式
@@ -188,30 +113,6 @@ const state = {
   [NOWOUTACTIVE]: 0,
   [NOWCOMACTIVE]: 0,
   [NOWINDEX]: 'board',
-  [CREATEMERCHANT]: {
-    role: '100',
-    displayName: '', // 商户昵称
-    rate: '', // 商户抽成比
-    merchantEmail: '', // 商户邮箱
-    hostName: '', // 负责人
-    hostContact: '', // 负责人联系方式
-    parent: '', // 所属代理商
-    remark: '', // 备注
-    contractPeriod: [], // 生效时间
-    isforever: false, // 是否永久有效
-    points: '', // 初始代理点数
-    msn: '', // 线路号
-    gameList: [], // 拥有游戏
-    loginWhiteList: '', // 商户白名单
-    frontURL: '', // 商户前端域名
-    username: '', // 代理商管理员用户名
-    password: '', // 代理商管理员密码
-    adminName: '', // 代理商管理员姓名
-    adminEmail: '', // 代理商管邮箱
-    adminContact: '' // 代理商管理员联系方式
-  }, // 创建一般商户基本信息
-  [SUCOUTREGIST]: [], // 出口代理商成功注册返回数据
-  [SUCCOMREGIST]: [], // 一般商户成功注册返回数据
   [GAME_DETAIL_INFO]: [], // 游戏商运营数据
   [GAME_READY_DETAIL_INFO]: [], // 游戏运营数据
   [OPERATOR_SUCCESS_INFO]: [], // 游戏运营商创建成功后返回数据
@@ -221,25 +122,6 @@ const state = {
   [OPERATOR_LIST]: [] // 获取游戏搜索
 } // 定义所有初始状态
 const actions = {
-  getParent (context) {
-    invoke({
-      url: api.parentList.url,
-      method: api.parentList.method
-    }).then(
-      result => {
-        const [err, ret] = result
-        if (err) {
-        } else {
-          var parent = ret.data.payload
-          // console.log('上级是:', parent)
-          context.commit({
-            type: 'getParentData',
-            data: parent
-          })
-        }
-      }
-    ) // 获取所属代理商
-  },
   getOperatorList (context) {
     invoke({
       url: api.managers.url,
@@ -302,166 +184,6 @@ const actions = {
       }
     )
   },
-  randomPassword (context) {
-    invoke({
-      url: api.randomPassword.url,
-      method: api.randomPassword.method
-    }).then(
-      result => {
-        const [err, ret] = result
-        if (err) {
-        } else {
-          var random = ret.data.payload.generatedPassword
-          console.log('随机生成的密码是: ', random)
-          context.commit({
-            type: 'getRandom',
-            data: random
-          })
-        }
-      }
-    )
-  }, // 随机生成密码
-  randomMSN (context) {
-    invoke({
-      url: api.randomMSN.url,
-      method: api.randomMSN.method
-    }).then(
-      result => {
-        const [err, ret] = result
-        if (err) {
-        } else {
-          var random = ret.data.payload
-          console.log('随机生成的线路号是: ', random)
-          context.commit({
-            type: 'getRandomMSN',
-            data: random
-          })
-        }
-      }
-    )
-  }, // 随机生成线路号
-  getProperty (context) {
-    var userID = ''
-    if (state[[SEARCHID]] === '') {
-      userID = localStorage.userID
-    } else {
-      userID = state[[SEARCHID]]
-    }
-    invoke({
-      url: api.bills.url + '/' + userID,
-      method: api.bills.method
-    }).then(
-      result => {
-        const [err, ret] = result
-        if (err) {
-        } else {
-          var myproperty = ret.data.payload.balance
-          console.log('该账户余额为:', myproperty)
-          context.commit({
-            type: 'setProperty',
-            data: myproperty
-          })
-        }
-      }
-    )
-  }, // 获取账户ID
-  getWaterfall (context) {
-    var userID = ''
-    if (state[[SEARCHID]] === '') {
-      userID = localStorage.userID
-    } else {
-      userID = state[[SEARCHID]]
-    }
-    invoke({
-      url: api.waterFall.url + '/' + userID,
-      method: api.waterFall.method
-    }).then(
-      result => {
-        const [err, ret] = result
-        if (err) {
-        } else {
-          var waterfall = ret.data.payload
-          console.log('账户流水为:', waterfall)
-          context.commit({
-            type: 'setWaterfall',
-            data: waterfall
-          })
-        }
-      }
-    )
-  }, // 获取账户流水
-  getAdmincenter (context) {
-    invoke({
-      url: api.adminCenter.url,
-      method: api.adminCenter.method
-    }).then(
-      result => {
-        const [err, ret] = result
-        if (err) {
-        } else {
-          var adminInfo = ret.data.payload
-          console.log('管理员信息是: ', adminInfo)
-          context.commit({
-            type: 'getadminInfo',
-            data: adminInfo
-          })
-          context.commit('closeLoading')
-        }
-      }
-    )
-  }, // 管理员个人信息
-  getAdminlist (context) {
-    invoke({
-      url: api.createAdmin.url,
-      method: 'get'
-    }).then(
-      result => {
-        const [err, ret] = result
-        if (err) {
-        } else {
-          var list = ret.data.payload
-          console.log('管理员信息是: ', list)
-          context.commit({
-            type: 'getadminList',
-            data: list
-          })
-          context.commit('closeLoading')
-        }
-      }
-    )
-  }, // 管理员列表
-  getMsnList (context) {
-    invoke({
-      url: api.msnList.url,
-      method: api.msnList.method
-    }).then(
-      result => {
-        const [err, ret] = result
-        if (err) {
-        } else {
-          var sortList = ret.data.payload.Items
-          sortList = sortList.sort(function compared (msn1, msn2) {
-            var value1 = parseInt(msn1.msn)
-            var value2 = parseInt(msn2.msn)
-            if (value1 < value2) {
-              return -1
-            } else if (value1 > value2) {
-              return 1
-            } else {
-              return 0
-            }
-          })
-          // var list = ret.data.payload.Items
-          console.log('商户号列表数据是: ', sortList)
-          context.commit({
-            type: 'setMsnlist',
-            data: sortList
-          })
-          context.commit('closeLoading')
-        }
-      }
-    )
-  }, // 线路号列表
   managerLoginList (context) {
     var checklogin = {
       role: '10',
@@ -571,9 +293,6 @@ const mutations = {
       state[[NOWSEARCHINDEX]] = localStorage.nowindex
     }
   },  // 刷新页面默认打开菜单
-  getParentData (state, payload) {
-    state[[FORMPARENT]] = payload.data
-  }, // 获取商户上级
   changeindex (state, payload) {
     state[[NOWINDEX]] = payload.data
   }, // 调试路由与导航
@@ -583,12 +302,6 @@ const mutations = {
   changenowcomActive (state, payload) {
     state[[NOWCOMACTIVE]] = 2
   }, // 游戏列表步骤条
-  getadminInfo (state, payload) {
-    state[[ADMININFO]] = payload.data
-  }, // 获取管理员信息
-  getadminList (state, payload) {
-    state[[ADMINLIST]] = payload.data
-  }, // 获取管理员列表
   getSearchID (state, payload) {
     console.log(payload, 'payload')
     state[[SEARCHID]] = payload.data
@@ -621,26 +334,11 @@ const mutations = {
       state[NOWCOMACTIVE] = 0
     }
   }, // 初始化创建步骤条步数
-  getOutsucRegist (state, payload) {
-    state[[SUCOUTREGIST]] = payload.data
-    // console.log('创建代理商成功后的返回数据是: ', state[[SUCOUTREGIST]])
-  }, // 获取成功创建代理商后返回信息
-  getComsucRegist (state, payload) {
-    state[[SUCCOMREGIST]] = payload.data
-    // console.log('创建一般商户成功后的返回数据是: ', state[[SUCCOMREGIST]])
-  }, // 获取成功创建一般商户后返回信息
   /* 出口代理商搜索,排序,分页 */
   getOperatorData (state, payload) {
     state[[OPERATOR_LIST]] = payload.data
     console.log(state[[OPERATOR_LIST]], '游戏商的数据')
   }, // 初始化游戏商数据
-  getComlistData (state, payload) {
-    state[[COMLISTDATA]] = payload.data
-    // for (var i = 0; i < payload.data.length; i++) {
-    //   state[[COMLISTDATA]][i].contractPeriod = state[[COMLISTDATA]][i].contractPeriod[0].slice(0, 10) + ' 至 ' + state[[COMLISTDATA]][i].contractPeriod[1].slice(0, 10)
-    // }
-    state[[COMLISTSEARCH]] = state[[COMLISTDATA]]
-  }, // 初始化一般商户数据
   getallGamelist (state, payload) {
     state[[GAMELIST]] = payload.data
     // console.log('游戏列表的数据是:', state[[GAMELIST]])
@@ -702,25 +400,6 @@ const mutations = {
       })
     }
   }, // 搜索游戏数据
-  setMsnlist (state, payload) {
-    state[[MSNLIST]] = payload.data
-    state[[COPYMSNLIST]] = payload.data
-  }, // 获取线路号列表
-  getSearchMSN (state, payload) {
-    state[[SEARCHMSN]] = payload.data
-    // console.log('获取到的搜索线路号为', state[[SEARCHMSN]])
-  }, // 获取搜索的MSN
-  resetMSNlist (state, payload) {
-    state[[MSNLIST]] = state[[COPYMSNLIST]]
-  }, // 重置搜索,返回原数据
-  msnSearch (state, payload) {
-    state[[MSNLIST]] = state[[COPYMSNLIST]]
-    if (state[[SEARCHMSN]] !== '' || state[[SEARCHMSN]] !== undefined) {
-      state[[MSNLIST]] = state[[MSNLIST]].filter(item => {
-        return item.msn.toString() === state[[SEARCHMSN]].toString()
-      })
-    }
-  }, // 返回线路号搜索结果
   gameDetailInfo (state, payload) {
     state[GAME_DETAIL_INFO] = payload.data
     // console.log(state, payload, '详细数据 游戏商')

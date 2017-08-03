@@ -3,24 +3,24 @@
     <h2 class="title">运营商信息</h2>
     <el-form :model="managerInfo" :rules="rules" ref="managerInfo" class="createform" label-width="150px" label-position="right">
       <el-form-item label="运营商名称" prop="companyName">
-        <el-input v-model="managerInfo.companyName" class="input" placeholder="请输入"></el-input>
+        <el-input v-model="managerInfo.companyName" class="input" placeholder="请输入" :maxlength='20'></el-input>
       </el-form-item>
       <el-form-item label="运营商描述" prop="companyDesc">
-        <el-input v-model="managerInfo.companyDesc" class="input" placeholder="请输入"></el-input>
+        <el-input v-model="managerInfo.companyDesc" class="input" type="textarea" placeholder="请输入" :maxlength='200'></el-input>
       </el-form-item>
-      <el-form-item label="联系人" prop="license">
-        <el-input v-model="managerInfo.license" class="input" placeholder="请输入"></el-input>
+      <el-form-item label="联系人" prop="companyContact">
+        <el-input v-model="managerInfo.companyContact" class="input" placeholder="请输入" :maxlength='16'></el-input>
       </el-form-item>
       <el-form-item label="联系方式" prop="companyContactWay">
-        <el-input v-model="managerInfo.companyContactWay" class="input" placeholder="请输入"></el-input>
+        <el-input v-model="managerInfo.companyContactWay" type="number" class="input" placeholder="请输入" :maxlength='20'></el-input>
       </el-form-item>
       <el-form-item label="联系邮箱（重要）" prop="companyEmail">
-        <el-input v-model="managerInfo.companyEmail" class="input" placeholder="请输入"></el-input>
+        <el-input v-model="managerInfo.companyEmail" class="input" placeholder="请输入" :maxlength='20'></el-input>
       </el-form-item>
     </el-form>
     <h2 class="title">合同信息</h2>
     <el-form :model="managerInfo" :rules="rules" ref="managerInfo" class="createform" label-width="150px" label-position="right">
-      <el-form-item label="所属区域">
+      <el-form-item label="所属区域" prop="companyRegion">
         <el-select v-model="managerInfo.companyRegion" placeholder="请选择" clearable class="input">
           <el-option v-for="item in regionOptions" :key="item.value" :label="item.label" :value="item.value"></el-option>
         </el-select>
@@ -50,7 +50,7 @@
       <!--</el-dialog>-->
       <!--</el-form-item>-->
       <el-form-item label="类型" prop="remark">
-        <el-input v-model="managerInfo.remark" class="input" placeholder="请输入" type="textarea"></el-input>
+        <el-input v-model="managerInfo.remark" class="input" placeholder="请输入" type="textarea" :maxlength='200'></el-input>
       </el-form-item>
     </el-form>
     <div class="stepbtn">
@@ -77,20 +77,25 @@
         type: 'getNowSearchIndex',
         data: 'addOperator'
       }) // 定位到创建代理商页
-      this.$store.dispatch('getParent')
     },
     data () {
       var validateCompanyName = (rule, value, callback) => {
+        var regName = new RegExp(/^[\u4E00-\u9FA5A-Za-z0-9_]+$/)
         if (value === '') {
           callback(new Error('请输入运营商名称'))
+        } else if (!regName.exec(value)) {
+          callback(new Error('请输入中英文或者数字'))
+        } else if (value.length < 2) {
+          callback(new Error('必须为两位数'))
         } else {
           callback()
           this.isfinish.companyName = true
         }
       } // 运营商名称
       var validateCompanyDesc = (rule, value, callback) => {
-        if (value === '') {
-          callback(new Error('请输入运营商描述'))
+        if (value && value.length < 2) {
+          callback(new Error('必须为两位数'))
+          this.isfinish.companyDesc = false
         } else {
           callback()
           this.isfinish.companyDesc = true
@@ -110,12 +115,28 @@
       var validateCompanyContactWay = (rule, value, callback) => {
         if (value === '') {
           callback(new Error('请输入联系方式'))
+        } else if (value.length < 2) {
+          callback(new Error('必须为两位数'))
         } else {
           callback()
           this.isfinish.companyContactWay = true
         }
       } // 联系方式
+      var validateCompanyContact = (rule, value, callback) => {
+        var reg = new RegExp(/^[\u4E00-\u9FA5A-Za-z0-9_]+$/)
+        if (value === '') {
+          callback(new Error('请输入联系人'))
+        } else if (!reg.exec(value)) {
+          callback(new Error('请输入中英文或者数字'))
+        } else if (value.length < 2) {
+          callback(new Error('必须为两位数'))
+        } else {
+          callback()
+          this.isfinish.companyContact = true
+        }
+      } // 联系人
       var validateCompanyRegion = (rule, value, callback) => {
+        console.log(value, 'value validateCompanyRegion')
         if (value === '') {
           callback(new Error('请选择所属区域'))
         } else {
@@ -131,17 +152,10 @@
           this.isfinish.companyContract = true
         }
       } // 验证负责人联系方式
-      var validateLicense = (rule, value, callback) => {
-        if (value === '') {
-          callback(new Error('请输入联系人'))
-        } else {
-          callback()
-          this.isfinish.license = true
-        }
-      } // 负责人
       var validateRemark = (rule, value, callback) => {
-        if (value === '') {
-          callback(new Error('请输入类型'))
+        if (value && value.length < 2) {
+          callback(new Error('必须为两位数'))
+          this.isfinish.remark = false
         } else {
           callback()
           this.isfinish.remark = true
@@ -150,22 +164,24 @@
       return {
         isfinish: {
           companyName: false,
-          companyDesc: false,
+          companyDesc: true, // 不是必填  所以默认为true
           companyContactWay: false,
+          companyContact: false,
           companyEmail: false,
           companyRegion: false,
           companyContract: false,
-          remark: false,
+          remark: true, // 不是必填  所以默认为true
           license: false
         },
         managerInfo: {
           companyName: '', // 运营商名称
           companyDesc: '', // 运营商描述
           companyContactWay: '', // 联系方式
+          companyContact: '', // 联系人
           companyEmail: '', // 邮箱
           companyRegion: '', // 所属区域
           companyContract: '', // 合同
-          license: '', // 负责人
+          license: '', // 执照
           remark: '' // 类型
         }, // 创建列表
         rules: {
@@ -187,8 +203,8 @@
           companyContract: [
             {validator: validateCompanyContract, trigger: 'blur'}
           ],
-          license: [
-            {validator: validateLicense, trigger: 'blur'}
+          companyContact: [
+            {validator: validateCompanyContact, trigger: 'blur'}
           ],
           remark: [
             {validator: validateRemark, trigger: 'blur'}
@@ -218,9 +234,9 @@
     },
     methods: {
       postCreateform () {
-        if (this.isfinish.companyName === false || this.isfinish.companyDesc === false || this.isfinish.companyEmail === false ||
-          this.isfinish.companyContactWay === false && this.isfinish.companyRegion === false || this.isfinish.license === false ||
-          this.isfinish.remark === false) {
+        if (this.isfinish.companyName === false || this.isfinish.companyEmail === false || this.isfinish.companyDesc === false ||
+          this.isfinish.companyContactWay === false || this.isfinish.remark === false ||
+          this.isfinish.companyContact === false || !this.managerInfo.companyRegion) {
           this.$message({
             message: '请完善创建信息',
             type: 'error'
@@ -237,7 +253,7 @@
             if (err) {
               console.log('err', err.response.data)
               this.$message({
-                message: err.response.data.err.err,
+                message: err.response.data.err.msg,
                 type: 'error'
               })
             } else if (res) {
@@ -256,10 +272,11 @@
           companyName: '', // 运营商名称
           companyDesc: '', // 运营商描述
           companyContactWay: '', // 联系方式
+          companyContact: '', // 联系人
           companyEmail: '', // 邮箱
           companyRegion: '', // 所属区域
           companyContract: '', // 合同
-          license: '', // 负责人
+          license: '', // 执照
           remark: '' // 类型
         }
       }

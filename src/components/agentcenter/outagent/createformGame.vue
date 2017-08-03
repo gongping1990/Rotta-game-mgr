@@ -3,10 +3,10 @@
     <h2 class="title">游戏基本信息</h2>
     <el-form :model="managerInfo" :rules="rules" ref="managerInfo" class="createform" label-width="150px" label-position="right">
       <el-form-item label="游戏名称" prop="gameName">
-        <el-input v-model="managerInfo.gameName" class="input" placeholder="请输入"></el-input>
+        <el-input v-model="managerInfo.gameName" class="input" type="text" placeholder="请输入" :maxlength='20'></el-input>
       </el-form-item>
       <el-form-item label="游戏简介" prop="gameRecommend">
-        <el-input v-model="managerInfo.gameRecommend" class="input" placeholder="请输入"></el-input>
+        <el-input v-model="managerInfo.gameRecommend" class="input" placeholder="请输入" type="textarea" :maxlength='200'></el-input>
       </el-form-item>
       <el-form-item label="所属分类" prop="gameType">
         <el-select v-model="managerInfo.gameType" placeholder="请选择" clearable class="input">
@@ -14,9 +14,12 @@
         </el-select>
       </el-form-item>
       <el-form-item label="所属运营商" prop="company">
-        <el-select v-model="managerInfo.company" placeholder="请选择" clearable class="input">
+        <el-select v-model="managerInfo.company" placeholder="请选择" clearable class="input" :change="changeCompany()">
           <el-option v-for="item in companyOptions" :key="item.companyName" :value="item.companyName" class="select-width"></el-option>
         </el-select>
+      </el-form-item>
+      <el-form-item label="key" v-if="companyKey">
+        <el-tag type="danger">{{companyKey}}</el-tag>
       </el-form-item>
       <!--<el-form-item label="游戏LOGO" prop="rate">-->
       <!--<el-upload-->
@@ -66,8 +69,16 @@
     },
     data () {
       var validateGameName = (rule, value, callback) => {
+        var regName = new RegExp(/^[\u4E00-\u9FA5A-Za-z0-9_]+$/)
         if (value === '') {
           callback(new Error('请输入游戏名称'))
+          this.isfinish.gameName = false
+        } else if (!regName.exec(value)) {
+          callback(new Error('请输入中英文或者数字'))
+          this.isfinish.gameName = false
+        } else if (value.length < 2) {
+          callback(new Error('必须为两位数'))
+          this.isfinish.gameName = false
         } else {
           callback()
           this.isfinish.gameName = true
@@ -84,6 +95,7 @@
       var validateCompany = (rule, value, callback) => {
         if (value === '') {
           callback(new Error('请选择所属运营商'))
+          this.isfinish.company = false
         } else {
           callback()
           this.isfinish.company = true
@@ -92,6 +104,10 @@
       var validateGameRecommend = (rule, value, callback) => {
         if (value === '') {
           callback(new Error('请输入游戏简介'))
+          this.isfinish.gameRecommend = false
+        } else if (value.length < 2) {
+          callback(new Error('必须为两位数'))
+          this.isfinish.gameRecommend = false
         } else {
           callback()
           this.isfinish.gameRecommend = true
@@ -101,8 +117,10 @@
         var ip = new RegExp(/^(\d+)\.(\d+)\.(\d+)\.(\d+)$/)
         if (value === '') {
           callback(new Error('请输入服务器'))
+          this.isfinish.ip = false
         } else if (!ip.exec(value)) {
           callback(new Error('请输入正确的服务器格式'))
+          this.isfinish.ip = false
         } else {
           callback()
           this.isfinish.ip = true
@@ -111,8 +129,10 @@
       var validatePort = (rule, value, callback) => {
         if (value === '') {
           callback(new Error('请输入端口'))
+          this.isfinish.port = false
         } else if (value < 1 || value > 65535) {
           callback(new Error('端口必须小于65535，大于1'))
+          this.isfinish.port = false
         } else {
           callback()
           this.isfinish.port = true
@@ -160,7 +180,7 @@
             label: '棋牌游戏',
             value: '0'
           }, {
-            label: '电子游戏；大时代奥术大师打算打算打算打算打打算阿萨德阿萨德阿萨德按时打算打算打算打算打算打算',
+            label: '电子游戏',
             value: '1'
           }, {
             label: '真人视讯',
@@ -171,15 +191,14 @@
     },
     computed: {
       companyOptions () {
-        console.log(this.$store.state.operatorList, 'ss')
         return this.$store.state.operatorList
       }
     },
     methods: {
       postCreateform () {
-        if (!this.managerInfo.gameName || !this.managerInfo.gameType || !this.managerInfo.company ||
-          !this.managerInfo.port || !this.managerInfo.ip || !this.managerInfo.gameRecommend) {
-          !this.$message({
+        if (this.isfinish.gameName || !this.managerInfo.gameType || !this.managerInfo.company ||
+          this.isfinish.port || this.isfinish.ip || this.isfinish.gameRecommend) {
+          this.$message({
             message: '请完善创建信息',
             type: 'error'
           })
@@ -218,7 +237,18 @@
           gameRecommend: '' // 简介
 //        gameImg: '' // 图片上传 （暂不实现）
         }
-      }
+      },
+      changeCompany () {
+        if (this.managerInfo.company) {
+          this.companyOptions.forEach(item => {
+            if (item.companyName === this.managerInfo.company) {
+              this.companyKey = item.companyKey
+            }
+          })
+        } else {
+          this.companyKey = ''
+        }
+      } // 处理select选择后联动
     }
   }
 </script>

@@ -7,6 +7,7 @@ import operatorDetail from 'view/operator/operatorDetail' // 游戏运营商详�
 import gameList from 'view/game/gameList' // 游戏列表
 import addGame from 'view/game/addGame' // 创建游戏
 import gameDetail from 'view/game/gameDetailed' // 游戏详细
+import propList from 'view/prop/propList' // 道具中心
 // 异常页面
 import Createerror from 'view/error/createerror' // 创建异常页面
 Vue.use(Router)
@@ -47,6 +48,10 @@ export default new Router({
     {
       path: '/gamedetail',
       component: gameDetail
+    },
+    {
+      path: '/propList',
+      component: propList
     }
   ]
 })

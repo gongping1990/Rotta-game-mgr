@@ -35,7 +35,7 @@
                     <!--<el-menu-item index="propertycenter">线路商报表</el-menu-item>-->
                 <!--</el-submenu>-->
                 <!-- <el-menu-item index="propertycenter">财务中心</el-menu-item> -->
-                <!--<el-menu-item index="controlcenter">风控中心</el-menu-item>-->
+                <el-menu-item index="propList">道具中心</el-menu-item>
                 <!--<el-menu-item index="commandcenter">客服中心</el-menu-item>-->
                 <!--<el-submenu index="5">-->
                     <!--<template slot="title">系统设置</template>-->
