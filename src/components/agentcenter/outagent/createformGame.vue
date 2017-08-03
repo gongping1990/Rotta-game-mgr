@@ -196,8 +196,8 @@
     },
     methods: {
       postCreateform () {
-        if (this.isfinish.gameName || !this.managerInfo.gameType || !this.managerInfo.company ||
-          this.isfinish.port || this.isfinish.ip || this.isfinish.gameRecommend) {
+        if (!this.isfinish.gameName || !this.managerInfo.gameType || !this.managerInfo.company ||
+          !this.isfinish.port || !this.isfinish.ip || !this.isfinish.gameRecommend) {
           this.$message({
             message: '请完善创建信息',
             type: 'error'

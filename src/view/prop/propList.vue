@@ -25,7 +25,7 @@
     <el-button type="primary" class="justfy1" @click="openModal()">创建新道具</el-button>
     <div class="propList">
       <el-table stripe :data="getItems">
-        <el-table-column label="序号" align="center" width="90" type="index">
+        <el-table-column label="排序" align="center" width="90" prop="order">
         </el-table-column>
         <el-table-column label="道具id" prop="toolId" align="center">
         </el-table-column>
@@ -68,6 +68,9 @@
       <el-form :model="propInfo">
         <el-form-item label="道具名称" label-width="100px" >
           <el-input v-model="propInfo.toolName" placeholder="请输入道具名称" :maxlength='10'></el-input>
+        </el-form-item>
+        <el-form-item label="排序" label-width="100px" >
+          <el-input v-model="propInfo.order" placeholder="请输入排序" type="number" :maxlength='10'></el-input>
         </el-form-item>
         <el-form-item label="备注" label-width="100px" >
           <el-input v-model="propInfo.remark" type="textarea" :rows="4" auto-complete="off" placeholder="请输入备注"
@@ -112,7 +115,8 @@ export default {
       propList: [],
       propInfo: {
         toolName: '',
-        remark: ''
+        remark: '',
+        order: ''
       },
       searchInfo: {
         toolName: '',
@@ -162,10 +166,7 @@ export default {
       invoke({
         url: api.addProp.url,
         method: api.addProp.method,
-        data: {
-          toolName: this.propInfo.toolName,
-          remark: this.propInfo.remark
-        }
+        data: this.propInfo
       }).then(
         result => {
           const [err, res] = result

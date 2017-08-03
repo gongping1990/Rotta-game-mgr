@@ -95,6 +95,7 @@ export default {
       return formatprev
     }, // 格式化创建时间
     goDetail (row) {
+      this.$store.commit('startLoading')
       invoke({
         url: api.gameOne.url + '/' + row.gameType + '/' + row.gameId,
         method: api.gameOne.method
@@ -108,6 +109,7 @@ export default {
             data: res.data.payload
           })
         }
+        this.$store.commit('closeLoading')
       })
       this.$router.push('gamedetail')
     },
