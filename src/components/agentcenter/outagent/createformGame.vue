@@ -13,7 +13,7 @@
       </el-form-item>
       <el-form-item label="所属分类" prop="gameType">
         <el-select v-model="managerInfo.gameType" placeholder="请选择" clearable class="input">
-          <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value" class="select-width"></el-option>
+          <el-option v-for="item in options" :key="item.code" :label="item.name" :value="item.code" class="select-width"></el-option>
         </el-select>
       </el-form-item>
       <el-form-item label="所属运营商" prop="company">
@@ -54,7 +54,7 @@
 
 <script type="text/ecmascript-6">
   import { invoke } from '@/libs/fetchLib'
-
+  import { api } from '@/libs/fetchConfig'
   export default {
     name: 'createform',
     beforeCreate () {
@@ -67,8 +67,7 @@
         type: 'getNowSearchIndex',
         data: 'addGame'
       }) // 定位到创建代理商页
-//    this.$store.commit('resetCreateout')
-//    this.$store.dispatch('getParent')
+      this.$store.commit('startLoading')
     },
     data () {
       var validateGameName = (rule, value, callback) => {
@@ -148,6 +147,9 @@
         } else if (value < 0) {
           callback(new Error('必须为正数'))
           this.isfinish.kindId = false
+        } else if (value.length !== 5) {
+          callback(new Error('必须为五位数'))
+          this.isfinish.kindId = false
         } else {
           callback()
           this.isfinish.kindId = true
@@ -195,24 +197,16 @@
             {validator: validateKindId, trigger: 'blur'}
           ]
         }, // 列表验证规则
-        options: [
-          {
-            label: '棋牌游戏',
-            value: '0'
-          }, {
-            label: '电子游戏',
-            value: '1'
-          }, {
-            label: '真人视讯',
-            value: '2'
-          }
-        ]
+        options: []
       }
     },
     computed: {
       companyOptions () {
         return this.$store.state.operatorList
       }
+    },
+    created () {
+      this.getGameType()
     },
     methods: {
       postCreateform () {
@@ -236,6 +230,10 @@
           }).then((data) => {
             let [err, res] = data
             if (err) {
+              this.$message({
+                message: err.response.data.err.msg,
+                type: 'error'
+              })
             } else if (res) {
               this.$store.commit({
                 type: 'getSuccessGame',
@@ -268,7 +266,25 @@
         } else {
           this.companyKey = ''
         }
-      } // 处理select选择后联动
+      }, // 处理select选择后联动
+      getGameType () {
+        invoke({
+          url: api.getGameType.url,
+          method: api.getGameType.method
+        })
+        .then(res => {
+          const [err, ret] = res
+          if (err) {
+            this.$message({
+              message: err.response.data.err.msg,
+              type: 'error'
+            })
+          } else {
+            this.options = ret.data.payload
+          }
+          this.$store.commit('closeLoading')
+        })
+      }
     }
   }
 </script>

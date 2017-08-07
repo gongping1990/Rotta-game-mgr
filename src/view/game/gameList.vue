@@ -13,18 +13,18 @@
       <el-table stripe :data="gameItems">
         <el-table-column label="游戏名称" prop="gameName" align="center">
         </el-table-column>
-        <el-table-column label="分类" prop="gameType" :formatter="getType" align="center">
+        <el-table-column label="分类" :formatter="getType" align="center">
         </el-table-column>
         <el-table-column label="所属运营商" prop="company.companyName" align="center">
         </el-table-column>
         <!--<el-table-column label="游戏消耗总点数" prop="points" align="center">-->
         <!--</el-table-column>-->
-        <el-table-column label="创建时间" prop="createdAt" :formatter="getAtime" min-width="95">
+        <el-table-column label="创建时间" prop="createdAt" :formatter="getAtime" >
         </el-table-column>
         </el-table-column>
-        <el-table-column label="状态" align="center" prop="gameStatus"  width="90">
+        <el-table-column label="状态" align="center" :formatter="gameState">
         </el-table-column>
-        <el-table-column label="操作" align="center" min-width="65">
+        <el-table-column label="操作" align="center">
           <template scope="scope">
             <el-button type="text" class="myBtn" @click="goDetail(scope.row)">查看</el-button>
             <!--<el-button type="text" class="myBtn" @click="editUser(scope.$index, scope.row)">更多</el-button>-->
@@ -60,13 +60,15 @@ export default {
     })
   },
   created () {
+    this.getGameType()
     this.$store.dispatch('getGamelist')
   },
   data () {
     return {
       nowSize: 5,
       nowPage: 1,
-      gameTypeList: ['棋牌游戏', '电子游戏', '真人视讯']
+      gameTypeList: [],
+      gameStatus: ['删除', '上线', '下线', '维护', '故障']
     }
   },
   computed: {
@@ -114,7 +116,32 @@ export default {
       this.$router.push('gamedetail')
     },
     getType (row) {
-      return this.gameTypeList[row.gameType]
+      for (var i = 0; i < this.gameTypeList.length; i++) {
+        if (this.gameTypeList[i].code === row.gameType) {
+          return this.gameTypeList[i].name
+        }
+      }
+    },
+    gameState (row) {
+      return this.gameStatus[row.gameStatus]
+    },
+    getGameType () {
+      invoke({
+        url: api.getGameType.url,
+        method: api.getGameType.method
+      })
+        .then(res => {
+          const [err, ret] = res
+          if (err) {
+            this.$message({
+              message: err.response.data.err.msg,
+              type: 'error'
+            })
+          } else {
+            this.gameTypeList = ret.data.payload
+          }
+          this.$store.commit('closeLoading')
+        })
     },
     getNowsize (size) {
       this.nowSize = size

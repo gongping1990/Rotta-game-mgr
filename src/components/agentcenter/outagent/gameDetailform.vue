@@ -5,7 +5,7 @@
       <div class="simpleform">
         <el-row>
           <el-col :span="12">
-            <span>所属类型: {{gameTypeList[gameDetail.gameType]}}</span>
+            <span>所属类型: {{gameDetail.gameType}}</span>
           </el-col>
           <el-col :span="12">
             <span>所属运营商: {{gameDetail.company.companyName}}</span>
