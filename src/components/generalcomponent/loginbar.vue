@@ -3,7 +3,7 @@
     <i class="el-icon-share"></i>
     <a href="#" class="help">帮助</a>
     <span class="imgBox">
-      <img src="#" alt="图像">
+      <img src="/static/admin.svg" alt="头像" class="user-icon">
     </span>
     <el-dropdown trigger="click" class="moreIcon" @command="userMenu">
       <span class="el-dropdown-link"><span class="userName">{{userInfo}}</span></span>
@@ -76,8 +76,9 @@ export default {
 <style scoped>
 .loginbar{float: right;margin-right: 2rem;}
 .el-icon-share{color: #797979;font-size: 1.5rem;margin-right: 0.5rem}
+.user-icon{width: 100%;height: 100%}
 .help{text-decoration: none;font-size: 1.25rem;color: #222222;vertical-align: 0.15rem;margin-right: 1rem}
 .userName{font-size: 1.4rem;font-weight: 300;cursor: pointer;}
-.imgBox{display: inline-block;width: 3.5rem;height: 3.5rem;border-radius: 100%;border: 1px solid gray;position: relative;bottom: -1.5rem;margin-right: 0.5rem;overflow: hidden}
+.imgBox{display: inline-block;width: 3.5rem;height: 3.5rem;border-radius: 100%;position: relative;bottom: -1.5rem;margin-right: 0.5rem;overflow: hidden}
 img{display: block;width: 100%;height: 100%;border: none}
 </style>

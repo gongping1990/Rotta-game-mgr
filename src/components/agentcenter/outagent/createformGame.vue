@@ -8,6 +8,9 @@
       <el-form-item label="游戏简介" prop="gameRecommend">
         <el-input v-model="managerInfo.gameRecommend" class="input" placeholder="请输入" type="textarea" :maxlength='200'></el-input>
       </el-form-item>
+      <el-form-item label="KindId" prop="kindId">
+        <el-input v-model="managerInfo.kindId" class="input" placeholder="请输入" type="number" :maxlength='5'></el-input>
+      </el-form-item>
       <el-form-item label="所属分类" prop="gameType">
         <el-select v-model="managerInfo.gameType" placeholder="请选择" clearable class="input">
           <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value" class="select-width"></el-option>
@@ -138,6 +141,18 @@
           this.isfinish.port = true
         }
       } // 端口
+      var validateKindId = (rule, value, callback) => {
+        if (value === '') {
+          callback(new Error('请输入KindId'))
+          this.isfinish.kindId = false
+        } else if (value < 0) {
+          callback(new Error('必须为正数'))
+          this.isfinish.kindId = false
+        } else {
+          callback()
+          this.isfinish.kindId = true
+        }
+      } // 端口
       return {
         isfinish: {
           gameName: false,
@@ -145,6 +160,7 @@
           company: false,
           port: false,
           ip: false,
+          kindId: false,
           gameRecommend: false
         },
         managerInfo: {
@@ -153,6 +169,7 @@
           company: '', // 运营商
           port: '', // 端口
           ip: '', // 服务器
+          kindId: '', // kindId
           gameRecommend: '' // 简介
         }, // 创建列表
         rules: {
@@ -173,6 +190,9 @@
           ],
           ip: [
             {validator: validateIp, trigger: 'blur'}
+          ],
+          kindId: [
+            {validator: validateKindId, trigger: 'blur'}
           ]
         }, // 列表验证规则
         options: [
@@ -197,7 +217,7 @@
     methods: {
       postCreateform () {
         if (!this.isfinish.gameName || !this.managerInfo.gameType || !this.managerInfo.company ||
-          !this.isfinish.port || !this.isfinish.ip || !this.isfinish.gameRecommend) {
+          !this.isfinish.port || !this.isfinish.ip || !this.isfinish.gameRecommend || !this.isfinish.kindId) {
           this.$message({
             message: '请完善创建信息',
             type: 'error'
