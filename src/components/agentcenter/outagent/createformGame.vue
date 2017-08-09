@@ -25,17 +25,17 @@
         <el-tag type="danger">{{companyKey}}</el-tag>
       </el-form-item>
       <!--<el-form-item label="游戏LOGO" prop="rate">-->
-      <!--<el-upload-->
-      <!--class="img-upload"-->
-      <!--action="https://jsonplaceholder.typicode.com/posts/"-->
-      <!--list-type="picture-card"-->
-      <!--:on-preview="handlePictureCardPreview"-->
-      <!--:on-remove="handleRemove">-->
-      <!--<i class="el-icon-plus"></i>-->
-      <!--</el-upload>-->
-      <!--<el-dialog v-model="dialogVisible" size="tiny">-->
-      <!--<img width="100%" :src="dialogImageUrl" alt="">-->
-      <!--</el-dialog>-->
+        <!--<el-upload-->
+          <!--class="img-upload"-->
+          <!--action="https://jsonplaceholder.typicode.com/posts/"-->
+          <!--list-type="picture-card"-->
+          <!--:on-preview="handlePictureCardPreview"-->
+          <!--:on-remove="handleRemove">-->
+          <!--<i class="el-icon-plus"></i>-->
+        <!--</el-upload>-->
+        <!--<el-dialog v-model="dialogVisible" size="tiny">-->
+          <!--<img width="100%" :src="dialogImageUrl" alt="">-->
+        <!--</el-dialog>-->
       <!--</el-form-item>-->
       <el-form-item label="服务器" prop="ip">
         <el-input v-model="managerInfo.ip" class="input" placeholder="请输入 （如：xxx.xxx.xxx.xxx）"></el-input>

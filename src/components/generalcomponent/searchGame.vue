@@ -71,7 +71,7 @@ span{margin-right: 0.2rem}
 .boxpre{margin-bottom: 2rem;padding: 2rem 0 0 10%;}
 .boxnext{padding: 1rem 0 0 10%;}
 .gosearch{text-align: right;padding: 2rem;}
-.input{width: 30%;}
+.input{width: 30%!important;}
 .justfy1{margin-left: 1rem;}
 .justfy2{margin-left: 2rem}
 .justfy3{margin-left: 1rem}
