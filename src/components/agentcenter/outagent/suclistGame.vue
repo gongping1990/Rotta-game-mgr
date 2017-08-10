@@ -20,8 +20,8 @@
         <el-col :span="24">
           <span class=" print-justfy1">游戏简介 : {{suclist.gameRecommend}}</span>
         </el-col>
-        <el-col :span="24">
-          <span class="print-justfy1">游戏LOGO : {{suclist.gameImg}}</span>
+        <el-col :span="10">
+          <span class="print-justfy1">游戏LOGO : <img style="width: 100%;margin-top: 1rem" :src="suclist.gameImg"></span>
         </el-col>
       </el-row>
     </div>

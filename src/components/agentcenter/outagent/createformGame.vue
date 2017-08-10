@@ -24,19 +24,26 @@
       <el-form-item label="key" v-if="companyKey">
         <el-tag type="danger">{{companyKey}}</el-tag>
       </el-form-item>
-      <!--<el-form-item label="游戏LOGO" prop="rate">-->
-        <!--<el-upload-->
-          <!--class="img-upload"-->
-          <!--action="https://jsonplaceholder.typicode.com/posts/"-->
-          <!--list-type="picture-card"-->
-          <!--:on-preview="handlePictureCardPreview"-->
-          <!--:on-remove="handleRemove">-->
-          <!--<i class="el-icon-plus"></i>-->
-        <!--</el-upload>-->
-        <!--<el-dialog v-model="dialogVisible" size="tiny">-->
-          <!--<img width="100%" :src="dialogImageUrl" alt="">-->
+      <el-form-item label="游戏LOGO" prop="gameImg">
+        <el-upload
+          action="//upload.qiniu.com"
+          list-type="picture-card"
+          ref="upload"
+          :on-success="handleSuccess"
+          :on-error="handleError"
+          :before-upload="beforeUpload"
+          :on-change='changeUpload'
+          :on-remove="removeImg"
+          :auto-upload="false"
+          :disabled="isUploadSuccess"
+          :data="form">
+          <i class="el-icon-plus"></i>
+          <div slot="tip" class="el-upload__tip">只能上传一张jpg/png文件，且不超过2M</div>
+        </el-upload>
+        <!--<el-dialog size="tiny">-->
+          <!--<img width="100%" :src="managerInfo.gameImg" alt="">-->
         <!--</el-dialog>-->
-      <!--</el-form-item>-->
+      </el-form-item>
       <el-form-item label="服务器" prop="ip">
         <el-input v-model="managerInfo.ip" class="input" placeholder="请输入 （如：xxx.xxx.xxx.xxx）"></el-input>
       </el-form-item>
@@ -172,7 +179,8 @@
           port: '', // 端口
           ip: '', // 服务器
           kindId: '', // kindId
-          gameRecommend: '' // 简介
+          gameRecommend: '', // 简介
+          gameImg: '' // 游戏logo
         }, // 创建列表
         rules: {
           gameName: [
@@ -197,7 +205,9 @@
             {validator: validateKindId, trigger: 'blur'}
           ]
         }, // 列表验证规则
-        options: []
+        options: [],
+        form: {},
+        isUploadSuccess: false
       }
     },
     computed: {
@@ -211,7 +221,7 @@
     methods: {
       postCreateform () {
         if (!this.isfinish.gameName || !this.managerInfo.gameType || !this.managerInfo.company ||
-          !this.isfinish.port || !this.isfinish.ip || !this.isfinish.gameRecommend || !this.isfinish.kindId) {
+          !this.isfinish.port || !this.isfinish.ip || !this.isfinish.gameRecommend || !this.isfinish.kindId || !this.managerInfo.gameImg) {
           this.$message({
             message: '请完善创建信息',
             type: 'error'
@@ -284,6 +294,59 @@
           }
           this.$store.commit('closeLoading')
         })
+      },
+      handleSuccess (file) {
+        this.isUploadSuccess = true
+        this.managerInfo.gameImg = `http://ouef62ous.bkt.clouddn.com/${file.key}`
+      }, // 图片上传成功回调
+      beforeUpload (file) {
+        console.log(file, 'beforeUpload')
+        const isJPG = file.type === ('image/jpeg' || 'image/png')
+        const isLt1M = file.size / 1024 / 1024 < 1
+        console.log(isJPG, isLt1M)
+        if (!isJPG) {
+          this.$message.error('上传头像图片只能是 JPG或者PNG 格式!')
+        } else if (!isLt1M) {
+          this.$message.error('上传游戏LOGO大小不能超过 1MB!')
+        }
+        return isJPG && isLt1M
+      }, // 上传前的检验 格式、大小等
+      handleError (err) {
+        console.log(err)
+        if (err) {
+          this.$message.error('上传失败，请重新选择')
+        }
+      }, // 错误回调
+      changeUpload (file) {
+        console.log(file, 'change')
+        invoke({
+          url: api.getUploadImgToken.url,
+          method: api.getUploadImgToken.method,
+          data: {
+            fileKey: file.name
+          }
+        }).then(res => {
+          const [err, ret] = res
+          if (err) {
+            this.$message({
+              message: err.response.data.err.msg,
+              type: 'error'
+            })
+          } else {
+            this.form = {
+              key: file.name,
+              token: ret.data.payload
+            }
+          }
+        })
+        setTimeout(() => {
+          this.$refs.upload.submit() // 延迟提交， 这里主要是针对data传送参数异步问题，用延迟暂时解决
+        }, 1000)
+      },
+      removeImg (fileList) {
+        if (!fileList.length) {
+          this.isUploadSuccess = false
+        }
       }
     }
   }

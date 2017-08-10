@@ -20,8 +20,8 @@
           </el-col>
         </el-row>
         <el-row>
-          <el-col :span="24">
-            <span>游戏LOGO: {{gameDetail.gameImg}}</span>
+          <el-col :span="10">
+            <span>游戏LOGO: <img style="width: 100%;margin-top: 1rem" :src="gameDetail.gameImg"></span>
           </el-col>
         </el-row>
       </div>
