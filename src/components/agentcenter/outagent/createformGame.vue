@@ -301,7 +301,7 @@
       }, // 图片上传成功回调
       beforeUpload (file) {
         console.log(file, 'beforeUpload')
-        const isJPG = file.type === ('image/jpeg' || 'image/png')
+        const isJPG = (file.type === 'image/jpeg') || (file.type === 'image/png')
         const isLt1M = file.size / 1024 / 1024 < 1
         console.log(isJPG, isLt1M)
         if (!isJPG) {
@@ -342,12 +342,12 @@
         setTimeout(() => {
           this.$refs.upload.submit() // 延迟提交， 这里主要是针对data传送参数异步问题，用延迟暂时解决
         }, 1000)
-      },
+      }, // 改变文件回调
       removeImg (fileList) {
-        if (!fileList.length) {
+        if (fileList && !fileList.length) {
           this.isUploadSuccess = false
         }
-      }
+      } // 移除回调
     }
   }
 </script>

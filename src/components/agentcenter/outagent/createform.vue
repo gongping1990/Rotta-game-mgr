@@ -25,30 +25,22 @@
           <el-option v-for="item in regionOptions" :key="item.value" :label="item.label" :value="item.value"></el-option>
         </el-select>
       </el-form-item>
-      <!--<el-form-item label="合同上传" prop="companyContract">-->
-      <!--<el-upload-->
-      <!--class="upload-demo"-->
-      <!--action="https://jsonplaceholder.typicode.com/posts/"-->
-      <!--:on-preview="handlePreview"-->
-      <!--:on-remove="handleRemove"-->
-      <!--:file-list="fileList">-->
-      <!--<el-button size="small" type="primary">点击上传</el-button>-->
-      <!--<div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>-->
-      <!--</el-upload>-->
-      <!--</el-form-item>-->
-      <!--<el-form-item label="上传执照" prop="companyContract">-->
-      <!--<el-upload-->
-      <!--class="img-upload"-->
-      <!--action="https://jsonplaceholder.typicode.com/posts/"-->
-      <!--list-type="picture-card"-->
-      <!--:on-preview="handlePictureCardPreview"-->
-      <!--:on-remove="handleRemove">-->
-      <!--<i class="el-icon-plus"></i>-->
-      <!--</el-upload>-->
-      <!--<el-dialog v-model="dialogVisible" size="tiny">-->
-      <!--<img width="100%" :src="dialogImageUrl" alt="">-->
-      <!--</el-dialog>-->
-      <!--</el-form-item>-->
+      <el-form-item label="上传合同/执照">
+        <el-upload
+          class="upload-demo"
+          action="//upload.qiniu.com"
+          ref="upload"
+          list-type="picture"
+          :on-success="handleSuccess"
+          :on-error="handleError"
+          :before-upload="beforeUpload"
+          :on-change='changeUpload'
+          :auto-upload="false"
+          :data="form">
+        <el-button size="small" type="primary">选取文件</el-button>
+        <div slot="tip" class="el-upload__tip">压缩包格式：.zip，且不超过20M；图片格式jpg/png，且不超过5M</div>
+      </el-upload>
+      </el-form-item>
       <el-form-item label="类型" prop="remark">
         <el-input v-model="managerInfo.remark" class="input" placeholder="请输入" type="textarea" :maxlength='200'></el-input>
       </el-form-item>
@@ -63,7 +55,7 @@
 
 <script type="text/ecmascript-6">
   import { invoke } from '@/libs/fetchLib'
-
+  import { api } from '@/libs/fetchConfig'
   export default {
     name: 'createform',
     beforeCreate () {
@@ -227,13 +219,21 @@
             label: '美洲',
             value: '5'
           }
-        ]
+        ],
+        form: {},
+        fileList: []
       }
     },
-    computed: {
-    },
+    computed: {},
     methods: {
       postCreateform () {
+        this.fileList.forEach(item => {
+          if (item.raw.type) {
+            this.managerInfo.license = `http://ouef62ous.bkt.clouddn.com/${item.name}`
+          } else {
+            this.managerInfo.companyContract = `http://ouef62ous.bkt.clouddn.com/${item.name}`
+          }
+        })
         if (this.isfinish.companyName === false || this.isfinish.companyEmail === false || this.isfinish.companyDesc === false ||
           this.isfinish.companyContactWay === false || this.isfinish.remark === false ||
           this.isfinish.companyContact === false || !this.managerInfo.companyRegion) {
@@ -241,6 +241,10 @@
             message: '请完善创建信息',
             type: 'error'
           })
+        } else if (!this.managerInfo.companyContract) {
+          this.$message.error('请上传合同文件')
+        } else if (!this.managerInfo.license) {
+          this.$message.error('请上传营业执照照片')
         } else {
           this.$store.commit('startLoading')
           invoke({
@@ -279,7 +283,74 @@
           license: '', // 执照
           remark: '' // 类型
         }
-      }
+      },
+      handleSuccess (response, file, fileList) {
+        this.fileList = fileList
+      }, // 文件上传成功回调
+      beforeUpload (file) {
+        const isFormatZip = (file.name.indexOf('.zip') > -1)
+        const isFormatImg = (file.type === 'image/jpeg') || (file.type === 'image/png')
+        const isSizeZip = file.size / 1024 / 1024 < 10
+        const isSizeImg = file.size / 1024 / 1024 < 5
+
+        if (this.fileList.length === 3) {
+          this.$message.error('对不起，只能上传两个附件')
+          return false
+        } else if (this.fileList.length === 2 && ((this.fileList[0].raw.type && file.type) || ((this.fileList[0].raw.type === '') && (file.type === '')))) {
+          this.$message.error('请上传不同类型的附件（IMG/ZIP）')
+          return false
+        }
+        if (file.type) {
+          if (!isFormatImg) {
+            this.$message.error('上传文件格式必须为jpg/png')
+            return false
+          } else if (!isSizeImg) {
+            this.$message.error('大小不能超过5MB!')
+            return false
+          }
+        } else {
+          if (!isFormatZip) {
+            this.$message.error('上传文件格式必须为zip')
+            return false
+          } else if (!isSizeZip) {
+            this.$message.error('大小不能超过20MB!')
+            return false
+          }
+        }
+      }, // 上传前的检验 格式、大小等
+      handleError (err) {
+        console.log(err)
+        if (err) {
+          this.$message.error('上传失败，请重新选择')
+        }
+      }, // 错误回调
+      changeUpload (file) {
+        console.log(file, 'change')
+        invoke({
+          url: api.getUploadImgToken.url,
+          method: api.getUploadImgToken.method,
+          data: {
+            fileKey: file.name
+          }
+        }).then(res => {
+          const [err, ret] = res
+          if (err) {
+            this.$message({
+              message: err.response.data.err.msg,
+              type: 'error'
+            })
+          } else {
+            this.form = {
+              key: file.name,
+              token: ret.data.payload
+            }
+          }
+        })
+        setTimeout(() => {
+          console.log('延迟 文件上传')
+          this.$refs.upload.submit() // 延迟提交， 这里主要是针对data传送参数异步问题，用延迟暂时解决
+        }, 1000)
+      } // 改变文件回调
     }
   }
 </script>
@@ -291,7 +362,6 @@
   .createform{width:52.5rem;margin: 0 auto;}
   .input{width: 28rem;}
   .title{font-weight: normal;color: #5a5a5a;margin: 1rem 0 2rem 0;text-align: center;margin-left: -35rem}
-  .isforever{margin-left: 0.5rem}
   .stepbtn{text-align: center;}
   .nextBtn{margin-right: 13.2rem}
   .img-upload .el-upload-list--picture-card{width: 20px}
