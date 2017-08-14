@@ -95,7 +95,7 @@
           <el-row>
             <el-col :span="12">
               <el-col :span="4">道具</el-col>
-              <el-col :span="20">
+              <el-col :span="18">
                 <el-select v-model="addToolInfo.toolName" placeholder="请选择" clearable style="width: 100%">
                   <el-option v-for="item in propList" :key="item.toolName" :laber="item.toolName" :value="item.toolName" class="select-width"></el-option>
                 </el-select>
@@ -103,7 +103,7 @@
             </el-col>
             <el-col :span="12">
               <el-col :span="4">数量</el-col>
-              <el-col :span="20">
+              <el-col :span="18">
                 <el-input v-model="addToolInfo.toolNum" placeholder="请输入数量" type="number" :maxlength='10'></el-input>
               </el-col>
             </el-col>
@@ -232,6 +232,8 @@ export default {
         this.packageInfo.duration = 0
       } else if (!this.packageInfo.content.length) {
         return this.$message.error('请添加礼包道具')
+      } else if (this.packageInfo.duration < 0) {
+        return this.$message.error('时间不能为负')
       }
 
       if (this.isSending) return // 防止重复提交
@@ -413,11 +415,12 @@ export default {
       )
     }, // 新增礼包获取道具列表
     addProp () {
-      console.log(this.isEditPackage, 'this.isEditPackage')
       if (!this.addToolInfo.toolName) {
         return this.$message.error('请选择道具')
       } else if (!this.addToolInfo.toolNum) {
         return this.$message.error('请选择数量')
+      } else if (this.addToolInfo.toolNum < 0) {
+        return this.$message.error('数量不能为负')
       }
       if (this.isEditPackage) {
         this.addToolList.forEach(item => {
