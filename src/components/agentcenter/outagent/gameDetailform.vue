@@ -16,7 +16,7 @@
             <span>游戏服务器: {{gameDetail.ip}}</span>
           </el-col>
           <el-col :span="12">
-            <span>代理商备注: {{ gameDetail.gameRecommend == 'NULL!' ? '' : gameDetail.gameRecommend}}</span>
+            <span>游戏简介: {{ gameDetail.gameRecommend == 'NULL!' ? '' : gameDetail.gameRecommend}}</span>
           </el-col>
         </el-row>
         <el-row>

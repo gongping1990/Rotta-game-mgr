@@ -36,15 +36,55 @@ export const api = {
     method: 'post'
   }, // 新增运营商
   propList: {
-    url: 'https://e73xksjd1k.execute-api.ap-southeast-1.amazonaws.com/dev/toolList',
+    url: 'https://1tft0m6m65.execute-api.ap-southeast-1.amazonaws.com/dev/toolList',
     method: 'post'
   }, // 查看道具列表
   changeState: {
-    url: 'https://e73xksjd1k.execute-api.ap-southeast-1.amazonaws.com/dev/toolChangeStatus',
+    url: 'https://1tft0m6m65.execute-api.ap-southeast-1.amazonaws.com/dev/toolChangeStatus',
     method: 'post'
   }, // 修改道具状态
   addProp: {
-    url: 'https://e73xksjd1k.execute-api.ap-southeast-1.amazonaws.com/dev/toolNew',
+    url: 'https://1tft0m6m65.execute-api.ap-southeast-1.amazonaws.com/dev/toolNew',
     method: 'post'
-  } // 新增道具
+  }, // 新增道具
+  delProp: {
+    url: 'https://1tft0m6m65.execute-api.ap-southeast-1.amazonaws.com/dev/toolDelete',
+    method: 'post'
+  }, // 删除道具
+  updateProp: {
+    url: 'https://1tft0m6m65.execute-api.ap-southeast-1.amazonaws.com/dev/toolUpdate',
+    method: 'post'
+  }, // 修改道具
+  getGameType: {
+    url: 'https://e73xksjd1k.execute-api.ap-southeast-1.amazonaws.com/dev/gameType',
+    method: 'post'
+  }, // 获取游戏类型
+  getSign: {
+    url: 'https://viwko4gvx0.execute-api.ap-southeast-1.amazonaws.com/dev/game/sign',
+    method: 'post'
+  }, // 获取签名
+  getUploadImgToken: {
+    url: 'https://ta68ojqk3g.execute-api.ap-southeast-1.amazonaws.com/dev/upToken',
+    method: 'post'
+  }, // 上传图片获取七牛云的
+  addPackage: {
+    url: 'https://1tft0m6m65.execute-api.ap-southeast-1.amazonaws.com/dev/packageNew',
+    method: 'post'
+  }, // 新增礼包
+  packageList: {
+    url: 'https://1tft0m6m65.execute-api.ap-southeast-1.amazonaws.com/dev/packageList',
+    method: 'post'
+  }, // 礼包列表
+  changePackageStatus: {
+    url: 'https://1tft0m6m65.execute-api.ap-southeast-1.amazonaws.com/dev/packageChangeStatus',
+    method: 'post'
+  }, // 变更礼包状态
+  packageUpdate: {
+    url: 'https://1tft0m6m65.execute-api.ap-southeast-1.amazonaws.com/dev/packageUpdate',
+    method: 'post'
+  }, // 修改礼包
+  packageDelete: {
+    url: 'https://1tft0m6m65.execute-api.ap-southeast-1.amazonaws.com/dev/packageDelete',
+    method: 'post'
+  } // 删除礼包
 }

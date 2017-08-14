@@ -2,7 +2,7 @@
   <div>
   	<div class="title">
       <el-breadcrumb separator="/">
-        <el-breadcrumb-item>道具中心 </el-breadcrumb-item>
+        <el-breadcrumb-item>道具管理 </el-breadcrumb-item>
         <el-breadcrumb-item><span  class="large">道具列表</span> </el-breadcrumb-item>
       </el-breadcrumb>
 	  </div>
@@ -25,11 +25,21 @@
     <el-button type="primary" class="justfy1" @click="openModal()">创建新道具</el-button>
     <div class="propList">
       <el-table stripe :data="getItems">
-        <el-table-column label="排序" align="center" width="90" prop="order">
-        </el-table-column>
+        <!--<el-table-column label="排序" align="center" width="90" prop="order">-->
+        <!--</el-table-column>-->
         <el-table-column label="道具id" prop="toolId" align="center">
         </el-table-column>
         <el-table-column label="道具名称" prop="toolName" align="center">
+        </el-table-column>
+        <el-table-column label="图标" align="center">
+          <template scope="scope">
+            {{scope.row.icon}}
+          </template>
+        </el-table-column>
+        <el-table-column label="描述" prop="desc" align="center">
+          <template scope="scope">
+            {{scope.row.desc == 'NULL!' ? '-' : scope.row.desc}}
+          </template>
         </el-table-column>
         <el-table-column label="创建时间" prop="createdAt" :formatter="getAtime">
         </el-table-column>
@@ -51,9 +61,11 @@
             </el-popover>
           </template>
         </el-table-column>
-        <el-table-column label="操作" align="center" min-width="65">
+        <el-table-column label="操作" align="center" min-width="100">
           <template scope="scope">
-            <el-button type="text" class="myBtn" @click="changeStatus(scope.row)">{{scope.row.toolStatus ? '冻结' : '解冻'}}</el-button>
+            <el-button type="text" @click="changeStatus(scope.row)">{{scope.row.toolStatus ? '冻结' : '解冻'}}</el-button>
+            <el-button type="text" @click="openModal(scope.row)">编辑</el-button>
+            <el-button type="text" @click="delProp(scope.row)">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -67,10 +79,14 @@
     <el-dialog title="添加道具" :visible.sync="isAddProp" style="text-align: center">
       <el-form :model="propInfo">
         <el-form-item label="道具名称" label-width="100px" >
-          <el-input v-model="propInfo.toolName" placeholder="请输入道具名称" :maxlength='10'></el-input>
+          <el-input v-model="propInfo.toolName" placeholder="请输入道具名称" :maxlength='20' :disabled="editStatus"></el-input>
         </el-form-item>
-        <el-form-item label="排序" label-width="100px" >
-          <el-input v-model="propInfo.order" placeholder="请输入排序" type="number" :maxlength='10'></el-input>
+        <el-form-item label="道具图标" label-width="100px" >
+          <el-input v-model="propInfo.icon" placeholder="请输入道具图标" :maxlength='256'></el-input>
+        </el-form-item>
+        <el-form-item label="描述" label-width="100px" >
+          <el-input v-model="propInfo.desc" type="textarea" :rows="4" auto-complete="off"  placeholder="请输入描述"
+                    :maxlength='200'></el-input>
         </el-form-item>
         <el-form-item label="备注" label-width="100px" >
           <el-input v-model="propInfo.remark" type="textarea" :rows="4" auto-complete="off" placeholder="请输入备注"
@@ -79,7 +95,7 @@
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="isAddProp = false">取 消</el-button>
-        <el-button type="primary" :load="isSending" @click="submitProp()">{{isSending ? '提交中' : '确 定'}}</el-button>
+        <el-button type="primary" :load="isSending" @click="submitProp(propInfo.toolId)">{{isSending ? '提交中' : '确 定'}}</el-button>
       </div>
     </el-dialog>
   </div>
@@ -111,12 +127,14 @@ export default {
       nowPage: 1,
       isAddProp: false,
       isSending: false,
+      editStatus: false,
       propStatus: ['冻结', '正常'],
       propList: [],
       propInfo: {
         toolName: '',
         remark: '',
-        order: ''
+        desc: '',
+        icon: ''
       },
       searchInfo: {
         toolName: '',
@@ -154,7 +172,7 @@ export default {
         }
       )
     },
-    submitProp () {
+    submitProp (id) {
       if (!this.propInfo.toolName) {
         return this.$message({
           message: '请输入道具名称',
@@ -164,7 +182,7 @@ export default {
       if (this.isSending) return // 防止重复提交
       this.isSending = true
       invoke({
-        url: api.addProp.url,
+        url: id ? api.updateProp.url : api.addProp.url,
         method: api.addProp.method,
         data: this.propInfo
       }).then(
@@ -216,11 +234,53 @@ export default {
         }
       )
     }, // 更改道具状态
-    openModal () {
+    delProp (row) {
+      this.$confirm('删除后该道具无法恢复，你还要继续吗？', `确定删除道具${row.toolName}吗？`, {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        invoke({
+          url: api.delProp.url,
+          method: api.delProp.method,
+          data: {
+            toolId: row.toolId,
+            toolName: row.toolName
+          }
+        }).then(
+          result => {
+            const [err, res] = result
+            if (err) {
+              this.$message({
+                message: err.response.data.err.msg,
+                type: 'error'
+              })
+            } else if (res) {
+              this.$message({
+                type: 'success',
+                message: '删除成功!'
+              })
+              this.isAddProp = false
+              this.getPropList()
+            }
+          }
+        )
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消删除'
+        })
+      })
+    }, // 删除
+    openModal (row = {}) {
       this.isAddProp = true
-      this.propInfo = {
-        toolName: '',
-        remark: ''
+      this.propInfo = JSON.parse(JSON.stringify(row))
+      if (JSON.stringify(row) !== '{}') {
+        this.editStatus = true
+        this.propInfo.desc = this.propInfo.desc === 'NULL!' ? '' : this.propInfo.desc
+        this.propInfo.remark = this.propInfo.remark === 'NULL!' ? '' : this.propInfo.remark
+      } else {
+        this.editStatus = false
       }
     },
     startSearch () {
@@ -257,9 +317,6 @@ export default {
       this.nowPage = page
       console.log('当前是第:' + page + '页')
     }
-  },
-  components: {
-
   }
 }
 </script>
@@ -272,7 +329,6 @@ export default {
   .searchResult{padding: 1rem 2rem}
   .justfy1{margin:0 2rem;}
   .page {padding-bottom: 2rem;text-align: right;margin-right: 1%;margin-top: 2rem}
-  .green{color: red}
   /*面包屑组件*/
   .title{padding: 2rem;}
   .large{font-size: 1.5rem;color: #000;position: relative;top: -0.3rem;}

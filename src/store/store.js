@@ -40,6 +40,7 @@ const GAME_SUCCESS_INFO = 'getSuccessGame' // 游戏成功后详细数据
 const GET_SEARCH_OPERATOR = 'getSearchOperator' // 获取游戏商搜索条件
 const GET_SEARCH_GAME = 'getSearchGame' // 获取游戏的搜索条件
 const OPERATOR_LIST = 'operatorList' // 游戏商列表数据
+const PLAYER_DETAIL = 'playDetail'// 玩家详细数据
 const state = {
   [ISAPI]: {
     randomCaptcha: {
@@ -119,7 +120,8 @@ const state = {
   [GAME_SUCCESS_INFO]: [], // 游戏创建成功后返回数据
   [GET_SEARCH_OPERATOR]: [], // 获取游戏商搜索
   [GET_SEARCH_GAME]: [], // 获取游戏搜索
-  [OPERATOR_LIST]: [] // 获取游戏搜索
+  [OPERATOR_LIST]: [], // 获取游戏搜索
+  [PLAYER_DETAIL]: [] // 玩家详细
 } // 定义所有初始状态
 const actions = {
   getOperatorList (context) {
@@ -165,7 +167,7 @@ const actions = {
       url: api.gameList.url,
       method: api.gameList.method,
       data: {
-        gameType: '0,1,2'
+        gameType: null
       }
     }).then(
       result => {
@@ -361,19 +363,19 @@ const mutations = {
   }, // 清空搜索条件
   outlistSearch (state) {
     if (state[[GET_SEARCH_OPERATOR]].companyContactWay !== '') {
-      state[[OUTLISTSEARCH]].Items = state[[OUTLISTSEARCH]].Items.filter(item => {
+      state[[OPERATOR_LIST]] = state[[OPERATOR_LIST]].filter(item => {
         return item.companyContactWay === state[[GET_SEARCH_OPERATOR]].companyContactWay
       })
     } else if (state[[GET_SEARCH_OPERATOR]].companyName !== '') {
-      state[[OUTLISTSEARCH]].Items = state[[OUTLISTSEARCH]].Items.filter(item => {
+      state[[OPERATOR_LIST]] = state[[OPERATOR_LIST]].filter(item => {
         return item.companyName === state[[GET_SEARCH_OPERATOR]].companyName
       })
     } else if (state[[GET_SEARCH_OPERATOR]].companyEmail !== '') {
-      state[[OUTLISTSEARCH]].Items = state[[OUTLISTSEARCH]].Items.filter(item => {
+      state[[OPERATOR_LIST]] = state[[OPERATOR_LIST]].filter(item => {
         return item.companyEmail === state[[GET_SEARCH_OPERATOR]].companyEmail
       })
     } else if (state[[GET_SEARCH_OPERATOR]].createAt) {
-      state[[OUTLISTSEARCH]].Items = state[[OUTLISTSEARCH]].Items.filter(item => {
+      state[[OPERATOR_LIST]] = state[[OPERATOR_LIST]].filter(item => {
         var now = dateformat(new Date(parseFloat(item.createdAt)), 'isoDate')
         return now === dateformat(new Date(parseFloat(state[[GET_SEARCH_OPERATOR]].createAt)), 'isoDate')
       })
@@ -415,6 +417,10 @@ const mutations = {
   getSuccessGame (state, payload) {
     state[GAME_SUCCESS_INFO] = payload.data
     console.log(state, payload, '游戏成功注册后的数据')
+  },
+  playerDetail (state, payload) {
+    state[PLAYER_DETAIL] = payload.data
+    console.log(state[PLAYER_DETAIL], '玩家详细')
   }
 } // 同步调用,更改state
 const getters = {
