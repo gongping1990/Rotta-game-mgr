@@ -178,6 +178,8 @@ export default {
           message: '请输入道具名称',
           type: 'error'
         })
+      } else if (!this.propInfo.icon) {
+        return this.$message.error('请输入道具图标')
       }
       if (this.isSending) return // 防止重复提交
       this.isSending = true
