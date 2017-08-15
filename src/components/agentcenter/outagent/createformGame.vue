@@ -206,6 +206,7 @@
           ]
         }, // 列表验证规则
         options: [],
+        fileList: [],
         form: {},
         isUploadSuccess: false
       }
@@ -262,8 +263,8 @@
           company: '', // 运营商
           port: '', // 端口
           ip: '', // 服务器
-          gameRecommend: '' // 简介
-//        gameImg: '' // 图片上传 （暂不实现）
+          gameRecommend: '', // 简介
+          gameImg: '' // 图片上传 （暂不实现）
         }
       },
       changeCompany () {
@@ -295,21 +296,25 @@
           this.$store.commit('closeLoading')
         })
       },
-      handleSuccess (file) {
+      handleSuccess (response, file, fileList) {
         this.isUploadSuccess = true
-        this.managerInfo.gameImg = `http://ouef62ous.bkt.clouddn.com/${file.key}`
+        this.fileList = fileList
+        this.managerInfo.gameImg = `http://ouef62ous.bkt.clouddn.com/${response.key}`
       }, // 图片上传成功回调
       beforeUpload (file) {
         console.log(file, 'beforeUpload')
         const isJPG = (file.type === 'image/jpeg') || (file.type === 'image/png')
         const isLt1M = file.size / 1024 / 1024 < 1
+        const length = this.fileList.length > 1
         console.log(isJPG, isLt1M)
         if (!isJPG) {
           this.$message.error('上传头像图片只能是 JPG或者PNG 格式!')
         } else if (!isLt1M) {
           this.$message.error('上传游戏LOGO大小不能超过 1MB!')
+        } else if (length) {
+          this.$message.error('对不起，只能上传一张图片！')
         }
-        return isJPG && isLt1M
+        return isJPG && isLt1M && !length
       }, // 上传前的检验 格式、大小等
       handleError (err) {
         console.log(err)
@@ -317,8 +322,9 @@
           this.$message.error('上传失败，请重新选择')
         }
       }, // 错误回调
-      changeUpload (file) {
-        console.log(file, 'change')
+      changeUpload (file, fileList) {
+        console.log(fileList, 'change')
+        this.isUploadSuccess = true
         invoke({
           url: api.getUploadImgToken.url,
           method: api.getUploadImgToken.method,
@@ -341,7 +347,7 @@
         })
         setTimeout(() => {
           this.$refs.upload.submit() // 延迟提交， 这里主要是针对data传送参数异步问题，用延迟暂时解决
-        }, 1000)
+        }, 2000)
       }, // 改变文件回调
       removeImg (fileList) {
         if (fileList && !fileList.length) {
