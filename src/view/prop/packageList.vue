@@ -85,7 +85,7 @@
         </el-form-item>
         <el-form-item label="礼包图标" prop="icon" label-width="110px" >
           <el-select v-model="packageInfo.icon" placeholder="请选择" clearable style="width: 100%">
-            <el-option v-for="item in numberOptions" :key="item.name" :value="item.name" class="select-width"></el-option>
+            <el-option v-for="item in numberOptions" :key="item.name" :value="item.name"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="持续时间（天）" label-width="110px" >
@@ -97,7 +97,7 @@
               <el-col :span="4">道具</el-col>
               <el-col :span="18">
                 <el-select v-model="addToolInfo.toolName" placeholder="请选择" clearable style="width: 100%">
-                  <el-option v-for="item in propList" :key="item.toolName" :laber="item.toolName" :value="item.toolName" class="select-width"></el-option>
+                  <el-option v-for="item in propList" :key="item.toolName" :laber="item.toolName" :value="item.toolName"></el-option>
                 </el-select>
               </el-col>
             </el-col>
@@ -423,13 +423,17 @@ export default {
         return this.$message.error('数量不能为负')
       }
       if (this.isEditPackage) {
-        this.addToolList.forEach(item => {
-          if (item.id === this.addToolInfo.id) {
-            item.toolName = this.addToolInfo.toolName
-            item.toolNum = this.addToolInfo.toolNum
+        let updateTool = {}
+        this.propList.forEach(item => {
+          if (item.toolName === this.addToolInfo.toolName) {
+            updateTool = JSON.parse(JSON.stringify(Object.assign(this.addToolInfo, item)))
           }
         })
-        console.log(this.addToolList, 'this.addToolList')
+        this.addToolList.forEach((item, index, array) => {
+          if (item.id === updateTool.id) {
+            array.splice(index, 1, updateTool)
+          }
+        })
         this.isEditPackage = false
       } else {
         let toolObj = {}
@@ -447,8 +451,8 @@ export default {
     }, // 删除新增的道具
     updatePackage (row) {
       this.isEditPackage = true
-      console.log(row)
       this.addToolInfo = JSON.parse(JSON.stringify(row))
+      console.log(this.addToolInfo, '编辑')
     }
   }
 }
@@ -462,7 +466,7 @@ export default {
   .searchResult{padding: 1rem 2rem}
   .justfy1{margin:0 2rem;}
   .page {padding-bottom: 2rem;text-align: right;margin-right: 1%;margin-top: 2rem}
-  .-package-add{height: 161px;  overflow: auto;}
+  .-package-add{max-height: 161px;  overflow: auto;}
   /*面包屑组件*/
   .title{padding: 2rem;}
   .large{font-size: 1.5rem;color: #000;position: relative;top: -0.3rem;}
