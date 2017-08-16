@@ -8,6 +8,9 @@ import gameList from 'view/game/gameList' // 游戏列表
 import addGame from 'view/game/addGame' // 创建游戏
 import gameDetail from 'view/game/gameDetailed' // 游戏详细
 import propList from 'view/prop/propList' // 道具中心
+import gameBackstage from 'view/gameBackstage/gameBackstage' // 游戏后台
+import upload from 'view/upload/upload' // 游戏后台
+import packageList from 'view/prop/packageList' // 礼包列表
 // 异常页面
 import Createerror from 'view/error/createerror' // 创建异常页面
 Vue.use(Router)
@@ -52,6 +55,18 @@ export default new Router({
     {
       path: '/propList',
       component: propList
+    },
+    {
+      path: '/gameBackstage',
+      component: gameBackstage
+    },
+    {
+      path: '/upload',
+      component: upload
+    },
+    {
+      path: '/packageList',
+      component: packageList
     }
   ]
 })

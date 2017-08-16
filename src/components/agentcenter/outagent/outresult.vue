@@ -19,7 +19,7 @@
         <el-table-column label="备注" align="center" width="65">
           <template scope="scope">
             <el-popover trigger="hover" placement="bottom-start" width="250">
-              <p>{{ scope.row.remark }}</p>
+              <p>{{scope.row.remark == 'NULL!' ? '' : scope.row.remark}}</p>
               <div slot="reference" class="">
                 <el-icon name="search" style="color:#108ee9"></el-icon>
               </div>

@@ -221,7 +221,8 @@
           }
         ],
         form: {},
-        fileList: []
+        fileList: [],
+        fileSuffix: ['jpg', 'png', 'zip']
       }
     },
     computed: {},
@@ -288,32 +289,30 @@
         this.fileList = fileList
       }, // 文件上传成功回调
       beforeUpload (file) {
-        const isFormatZip = (file.name.indexOf('.zip') > -1)
-        const isFormatImg = (file.type === 'image/jpeg') || (file.type === 'image/png')
-        const isSizeZip = file.size / 1024 / 1024 < 10
+        const isSizeZip = file.size / 1024 / 1024 < 20
         const isSizeImg = file.size / 1024 / 1024 < 5
+        const suffix = this.suffixFun(file.name)
 
-        if (this.fileList.length === 3) {
+        if (!(this.fileSuffix.indexOf(suffix) > -1)) {
+          this.$message.error('对不起，只能上传zip/jpg/png格式的文件')
+          return false
+        } else if ((suffix === ('jpg' || 'png')) && !isSizeImg) {
+          this.$message.error('大小不能超过5MB!')
+          return false
+        } else if ((suffix === 'zip') && !isSizeZip) {
+          this.$message.error('大小不能超过20MB!')
+          return false
+        } else if (this.fileList.length === 3) {
           this.$message.error('对不起，只能上传两个附件')
           return false
-        } else if (this.fileList.length === 2 && ((this.fileList[0].raw.type && file.type) || ((this.fileList[0].raw.type === '') && (file.type === '')))) {
-          this.$message.error('请上传不同类型的附件（IMG/ZIP）')
-          return false
-        }
-        if (file.type) {
-          if (!isFormatImg) {
-            this.$message.error('上传文件格式必须为jpg/png')
-            return false
-          } else if (!isSizeImg) {
-            this.$message.error('大小不能超过5MB!')
+        } else if (this.fileList.length === 2 && (this.suffixFun(this.fileList[0].name) !== 'zip')) {
+          if ((suffix === 'jpg') || (suffix === 'png')) {
+            this.$message.error('请上传不同类型的附件（IMG/ZIP）')
             return false
           }
-        } else {
-          if (!isFormatZip) {
-            this.$message.error('上传文件格式必须为zip')
-            return false
-          } else if (!isSizeZip) {
-            this.$message.error('大小不能超过20MB!')
+        } else if (this.fileList.length === 2 && (this.suffixFun(this.fileList[0].name) === 'zip')) {
+          if (this.suffixFun(this.fileList[0].name) === suffix) {
+            this.$message.error('请上传不同类型的附件（IMG/ZIP）')
             return false
           }
         }
@@ -349,8 +348,12 @@
         setTimeout(() => {
           console.log('延迟 文件上传')
           this.$refs.upload.submit() // 延迟提交， 这里主要是针对data传送参数异步问题，用延迟暂时解决
-        }, 1000)
-      } // 改变文件回调
+        }, 2000)
+      }, // 改变文件回调
+      suffixFun (o) {
+        let arr = o.split('.')
+        return arr[arr.length - 1]
+      } // 截取文件名的后缀
     }
   }
 </script>
