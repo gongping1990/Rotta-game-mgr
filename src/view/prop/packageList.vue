@@ -255,11 +255,11 @@ export default {
               message: '提交成功',
               type: 'success'
             })
+            this.addToolList = []
             this.isAddProp = false
             this.getPackageList()
           }
           this.isSending = false
-          this.addToolList = []
         }
       )
     },

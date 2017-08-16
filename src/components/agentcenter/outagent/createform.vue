@@ -229,10 +229,10 @@
     methods: {
       postCreateform () {
         this.fileList.forEach(item => {
-          if (item.raw.type) {
-            this.managerInfo.license = `http://ouef62ous.bkt.clouddn.com/${item.name}`
-          } else {
+          if (this.suffixFun(item.name) === 'zip') {
             this.managerInfo.companyContract = `http://ouef62ous.bkt.clouddn.com/${item.name}`
+          } else {
+            this.managerInfo.license = `http://ouef62ous.bkt.clouddn.com/${item.name}`
           }
         })
         if (this.isfinish.companyName === false || this.isfinish.companyEmail === false || this.isfinish.companyDesc === false ||
