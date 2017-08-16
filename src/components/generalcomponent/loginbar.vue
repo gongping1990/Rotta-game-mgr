@@ -6,7 +6,7 @@
       <img src="/static/admin.svg" alt="头像" class="user-icon">
     </span>
     <el-dropdown trigger="click" class="moreIcon" @command="userMenu">
-      <span class="el-dropdown-link"><span class="userName">{{userInfo}}</span></span>
+      <span class="el-dropdown-link"><span class="userName">{{formatUser(userInfo)}}</span></span>
         <el-dropdown-menu slot="dropdown">
           <el-dropdown-item command="personalcenter">个人中心</el-dropdown-item>
           <el-dropdown-item command="logout">退出登录</el-dropdown-item>
@@ -68,6 +68,14 @@ export default {
         data: 'personalcenter'
       })
       this.$router.push('personalcenter')
+    },
+    formatUser (o) {
+      console.log(o, 'name')
+      if (o) {
+        return o.split(' ')[1]
+      } else {
+        return ''
+      }
     }
   }
 }

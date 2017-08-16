@@ -41,7 +41,7 @@
         <div slot="tip" class="el-upload__tip">压缩包格式：.zip，且不超过20M；图片格式jpg/png，且不超过5M</div>
       </el-upload>
       </el-form-item>
-      <el-form-item label="类型" prop="remark">
+      <el-form-item label="备注" prop="remark">
         <el-input v-model="managerInfo.remark" class="input" placeholder="请输入" type="textarea" :maxlength='200'></el-input>
       </el-form-item>
     </el-form>

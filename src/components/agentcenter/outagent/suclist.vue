@@ -1,10 +1,10 @@
 <template>
   <div class="suclist print">
     <div class="list-title">
-      <el-row>
+      <el-row class="list-title">
         <p class="title print-title">运营商 : {{suclist.companyName}}</p>
       </el-row>
-      <el-row>
+      <el-row class="list-title">
         <el-col :span="12">
           <span class="print-justfy1">代理商ID : {{suclist.companyId}}</span>
         </el-col>
