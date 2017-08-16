@@ -409,7 +409,11 @@ export default {
               type: 'error'
             })
           } else {
-            this.propList = res.data.payload
+            for (let item of res.data.payload) {
+              if (item.toolStatus) {
+                this.propList.push(item)
+              }
+            }
           }
         }
       )
