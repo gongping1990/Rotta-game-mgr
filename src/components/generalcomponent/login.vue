@@ -2,7 +2,6 @@
   <div class="login">
     <div class="login-left">
       <p class="title-big">NA 游戏后台管理系统</p>
-      <p class="title-small">--成都罗塔科技</p>
     </div>
     <div class="login-right">
       <el-form :model="userinfo" :rules="rules" :ref="userinfo">
@@ -21,12 +20,11 @@
           </div>
         </el-form-item>
         <el-form-item class="justfy3">
-          <el-button @click="onSubmit" class="justfy1 botton" :loading="loading">登陆</el-button>
-          <el-button @click="forgetPassword" class="botton">忘记密码</el-button>
+          <el-button @click="onSubmit" class="justfy1" :loading="loading">登录</el-button>
+          <el-button @click="forgetPassword" >忘记密码</el-button>
         </el-form-item>
       </el-form>
     </div>
-    <div style="opacity: 0">2017-7-25 18:12:51</div>
   </div>
 </template>
 

@@ -21,7 +21,6 @@
 <script>
 import Outstep from '@/components/agentcenter/outagent/outstep'
 import Createform from '@/components/agentcenter/outagent/createformGame'
-import Setform from '@/components/agentcenter/outagent/setform'
 import Stepbtn from '@/components/generalcomponent/stepbtn'
 import Successbtn from '@/components/generalcomponent/successbtn'
 import Success from '@/components/generalcomponent/successGame'
@@ -30,7 +29,6 @@ export default {
   components: {
     Outstep,
     Createform,
-    Setform,
     Stepbtn,
     Successbtn,
     Success,

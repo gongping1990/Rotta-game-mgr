@@ -21,7 +21,7 @@
           <span class=" print-justfy1">代理商Email : {{suclist.companyEmail}}</span>
         </el-col>
         <el-col :span="12">
-          <span class="print-justfy1">代理商备注 : {{suclist.remark}}</span>
+          <span class="print-justfy1">代理商备注 : {{suclist.remark == 'NULL!' ? '暂无' : suclist.remark}}</span>
         </el-col>
       </el-row>
     </div>
