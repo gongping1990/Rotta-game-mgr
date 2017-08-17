@@ -29,14 +29,14 @@
         <!--</el-table-column>-->
         <el-table-column label="道具id" prop="toolId" align="center">
         </el-table-column>
-        <el-table-column label="道具名称" prop="toolName" align="center">
+        <el-table-column label="道具名称" prop="toolName" align="center" :show-overflow-tooltip="true">
         </el-table-column>
-        <el-table-column label="图标" align="center">
+        <el-table-column label="图标" align="center" :show-overflow-tooltip="true">
           <template scope="scope">
             {{scope.row.icon}}
           </template>
         </el-table-column>
-        <el-table-column label="描述" prop="desc" align="center">
+        <el-table-column label="描述" prop="desc" align="center" :show-overflow-tooltip="true">
           <template scope="scope">
             {{scope.row.desc == 'NULL!' ? '-' : scope.row.desc}}
           </template>
@@ -82,7 +82,7 @@
           <el-input v-model="propInfo.toolName" placeholder="请输入道具名称" :maxlength='20' :disabled="editStatus"></el-input>
         </el-form-item>
         <el-form-item label="道具图标" label-width="100px" >
-          <el-input v-model="propInfo.icon" placeholder="请输入道具图标" :maxlength='256'></el-input>
+          <el-input v-model="propInfo.icon" placeholder="请输入道具图标" :maxlength='20'></el-input>
         </el-form-item>
         <el-form-item label="描述" label-width="100px" >
           <el-input v-model="propInfo.desc" type="textarea" :rows="4" auto-complete="off"  placeholder="请输入描述"

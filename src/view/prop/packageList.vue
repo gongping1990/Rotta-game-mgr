@@ -42,6 +42,9 @@
         <el-table-column label="图标" prop="icon" align="center">
         </el-table-column>
         <el-table-column label="持续时间" prop="duration" align="center">
+          <template scope="scope">
+            {{scope.row.duration == 0 ? '永久' : (scope.row.duration + '天')}}
+          </template>
         </el-table-column>
         <el-table-column label="创建时间" prop="createdAt" :formatter="getAtime">
         </el-table-column>
@@ -419,12 +422,13 @@ export default {
       )
     }, // 新增礼包获取道具列表
     addProp () {
+      let reg = new RegExp(/^[0-9]*[1-9][0-9]*$/)
       if (!this.addToolInfo.toolName) {
         return this.$message.error('请选择道具')
       } else if (!this.addToolInfo.toolNum) {
         return this.$message.error('请选择数量')
-      } else if (this.addToolInfo.toolNum < 0) {
-        return this.$message.error('数量不能为负')
+      } else if (!reg.exec(this.addToolInfo.toolNum)) {
+        return this.$message.error('道具数量范围为1-1000,000,00的正整数')
       }
       if (this.isEditPackage) {
         let updateTool = {}
