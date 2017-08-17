@@ -6,7 +6,7 @@
       </el-row>
       <el-row class="list-title">
         <el-col :span="12">
-          <span class="print-justfy1">代理商ID : {{suclist.companyId}}</span>
+          <span class="print-justfy1">运营商ID : {{suclist.companyId}}</span>
         </el-col>
         <el-col :span="6">
           <span class="print-justfy1">联系人 : {{suclist.companyContact}}</span>
@@ -18,10 +18,10 @@
 
       <el-row>
         <el-col :span="12">
-          <span class=" print-justfy1">代理商Email : {{suclist.companyEmail}}</span>
+          <span class=" print-justfy1">运营商Email : {{suclist.companyEmail}}</span>
         </el-col>
         <el-col :span="12">
-          <span class="print-justfy1">代理商备注 : {{suclist.remark == 'NULL!' ? '暂无' : suclist.remark}}</span>
+          <span class="print-justfy1">运营商描述 : {{suclist.companyDesc == 'NULL!' ? '暂无' : suclist.companyDesc}}</span>
         </el-col>
       </el-row>
     </div>
@@ -29,6 +29,7 @@
       <el-row>
         <p class="print-justfy1">合作区域 : {{regionList[suclist.companyRegion-1]}}</p>
         <p class="print-justfy1"><span>KEY : {{suclist.companyKey}}</span></p>
+        <p class="print-justfy1"><span>合同备注 : {{suclist.remark == 'NULL!' ? '暂无' : suclist.remark}}</span></p>
       </el-row>
     </div>
 

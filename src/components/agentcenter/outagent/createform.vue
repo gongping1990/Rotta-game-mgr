@@ -15,7 +15,7 @@
         <el-input v-model="managerInfo.companyContactWay" type="number" class="input" placeholder="请输入" :maxlength='20'></el-input>
       </el-form-item>
       <el-form-item label="联系邮箱（重要）" prop="companyEmail">
-        <el-input v-model="managerInfo.companyEmail" class="input" placeholder="请输入" :maxlength='20'></el-input>
+        <el-input v-model="managerInfo.companyEmail" class="input" placeholder="请输入" :maxlength='30'></el-input>
       </el-form-item>
     </el-form>
     <h2 class="title">合同信息</h2>
@@ -35,13 +35,14 @@
           :on-error="handleError"
           :before-upload="beforeUpload"
           :on-change='changeUpload'
+          :on-remove='changeRemove'
           :auto-upload="false"
           :data="form">
         <el-button size="small" type="primary">选取文件</el-button>
         <div slot="tip" class="el-upload__tip">压缩包格式：.zip，且不超过20M；图片格式jpg/png，且不超过5M</div>
       </el-upload>
       </el-form-item>
-      <el-form-item label="备注" prop="remark">
+      <el-form-item label="合同备注" prop="remark">
         <el-input v-model="managerInfo.remark" class="input" placeholder="请输入" type="textarea" :maxlength='200'></el-input>
       </el-form-item>
     </el-form>
@@ -94,11 +95,11 @@
         }
       } // 运营商描述
       var validateCompanyEmail = (rule, value, callback) => {
-        var email = new RegExp(/^([a-zA-Z0-9]+[_|_|.]?)*[a-zA-Z0-9]+@([a-zA-Z0-9]+[_|_|.]?)*[a-zA-Z0-9]+.[a-zA-Z]{2,4}$/)
+        var email = new RegExp(/^([a-zA-Z0-9_-]){1,20}@([a-zA-Z0-9_-])+(.[a-zA-Z0-9_-])+/)
         if (value === '') {
           callback(new Error('请输入邮箱'))
         } else if (!email.exec(value)) {
-          callback(new Error('邮箱格式不对'))
+          callback(new Error('邮箱格式不对，长度为2-20个字符'))
         } else {
           callback()
           this.isfinish.companyEmail = true
@@ -107,8 +108,8 @@
       var validateCompanyContactWay = (rule, value, callback) => {
         if (value === '') {
           callback(new Error('请输入联系方式'))
-        } else if (value.length < 2) {
-          callback(new Error('必须为两位数'))
+        } else if (value.length < 2 || value.length > 20) {
+          callback(new Error('长度位2-20个字符'))
         } else {
           callback()
           this.isfinish.companyContactWay = true
@@ -350,6 +351,14 @@
           this.$refs.upload.submit() // 延迟提交， 这里主要是针对data传送参数异步问题，用延迟暂时解决
         }, 2000)
       }, // 改变文件回调
+      changeRemove (file) {
+        if (this.suffixFun(file.name).toLowerCase() === 'zip') {
+          this.managerInfo.companyContract = ''
+        } else {
+          this.managerInfo.license = ''
+        }
+        console.log(file, 'change')
+      }, // 移除事件
       suffixFun (o) {
         let arr = o.split('.')
         return arr[arr.length - 1]

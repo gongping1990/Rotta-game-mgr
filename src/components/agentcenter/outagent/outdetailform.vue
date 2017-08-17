@@ -19,7 +19,7 @@
             <span>运营商Email: {{gameDetail.companyEmail}}</span>
           </el-col>
           <el-col :span="8">
-            <span>代理商备注: {{gameDetail.remark == 'NULL!' ? '暂无' : gameDetail.remark}}</span>
+            <span>运营商描述: {{gameDetail.companyDesc == 'NULL!' ? '暂无' : gameDetail.companyDesc}}</span>
           </el-col>
         </el-row>
       </div>
