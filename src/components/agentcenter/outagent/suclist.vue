@@ -74,7 +74,7 @@ export default {
 .list-form p{line-height: 3rem;font-size: 1rem;}
 .list-bottom{text-align: right;}
 .list-bottom p{margin: 1rem;padding-top: 1rem;color: #5a5a5a;}
-.print-justfy1{color: #a5a5a5}
+.print-justfy1{color: #a5a5a5; word-wrap: break-word}
 /**/
 @media print {
   .Noprint { display: none }
