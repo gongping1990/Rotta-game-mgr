@@ -51,8 +51,8 @@
         <el-input v-model="managerInfo.port" class="input" type="number" placeholder="请输入"></el-input>
       </el-form-item>
     </el-form>
-    <div class="stepbtn">
-      <el-button type="primary" class="nextBtn" @click="postCreateform">下一步</el-button>
+    <div class="stepbtn createform">
+      <el-button type="primary" class="nextBtn" @click="postCreateform" style="margin-left: 120px">下一步</el-button>
       <el-button @click="resetData">重置</el-button>
     </div>
   </div>
@@ -363,10 +363,9 @@
   /*创建代理商列表*/
   .outcreate{margin-bottom: 10rem}
   .createform{width:52.5rem;margin: 0 auto;}
-  .input{width: 28rem;}
+  .input{width: 100%  ;}
   .select-width{max-width: 336px}
   .title{font-weight: normal;color: #5a5a5a;margin: 1rem 0 2rem 0;text-align: center;margin-left: -30rem}
   .stepbtn{text-align: center}
-  .nextBtn{margin-right: 13.2rem}
   .img-upload .el-upload-list--picture-card{width: 20px}
 </style>

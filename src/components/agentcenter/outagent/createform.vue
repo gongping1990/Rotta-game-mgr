@@ -45,8 +45,8 @@
         <el-input v-model="managerInfo.remark" class="input" placeholder="请输入" type="textarea" :maxlength='200'></el-input>
       </el-form-item>
     </el-form>
-    <div class="stepbtn">
-      <el-button type="primary" class="nextBtn" @click="postCreateform">下一步</el-button>
+    <div class="stepbtn createform">
+      <el-button type="primary" class="nextBtn" @click="postCreateform" style="margin-left: 120px">下一步</el-button>
       <el-button @click="resetData">重置</el-button>
     </div>
   </div>
@@ -229,7 +229,7 @@
     methods: {
       postCreateform () {
         this.fileList.forEach(item => {
-          if (this.suffixFun(item.name) === 'zip') {
+          if (this.suffixFun(item.name).toLowerCase() === 'zip') {
             this.managerInfo.companyContract = `http://ouef62ous.bkt.clouddn.com/${item.name}`
           } else {
             this.managerInfo.license = `http://ouef62ous.bkt.clouddn.com/${item.name}`
@@ -291,7 +291,7 @@
       beforeUpload (file) {
         const isSizeZip = file.size / 1024 / 1024 < 20
         const isSizeImg = file.size / 1024 / 1024 < 5
-        const suffix = this.suffixFun(file.name)
+        const suffix = this.suffixFun(file.name).toLowerCase()
 
         if (!(this.fileSuffix.indexOf(suffix) > -1)) {
           this.$message.error('对不起，只能上传zip/jpg/png格式的文件')
@@ -363,9 +363,7 @@
   /*创建代理商列表*/
   .outcreate{margin-bottom: 10rem}
   .createform{width:52.5rem;margin: 0 auto;}
-  .input{width: 28rem;}
+  .input{width: 100%;}
   .title{font-weight: normal;color: #5a5a5a;margin: 1rem 0 2rem 0;text-align: center;margin-left: -35rem}
   .stepbtn{text-align: center;}
-  .nextBtn{margin-right: 13.2rem}
-  .img-upload .el-upload-list--picture-card{width: 20px}
 </style>

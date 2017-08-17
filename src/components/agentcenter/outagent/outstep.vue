@@ -28,5 +28,5 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-.outstep{padding-top: 3rem;}
+.outstep{padding-top: 3rem;margin-left:6rem}
 </style>
