@@ -38,7 +38,7 @@
           :disabled="isUploadSuccess"
           :data="form">
           <i class="el-icon-plus"></i>
-          <div slot="tip" class="el-upload__tip">只能上传一张jpg/png文件，且不超过2M</div>
+          <div slot="tip" class="el-upload__tip">只能上传一张jpg/png文件，且不超过1M</div>
         </el-upload>
         <!--<el-dialog size="tiny">-->
           <!--<img width="100%" :src="managerInfo.gameImg" alt="">-->
@@ -309,10 +309,13 @@
         console.log(isJPG, isLt1M)
         if (!isJPG) {
           this.$message.error('上传头像图片只能是 JPG或者PNG 格式!')
+          this.isUploadSuccess = false
         } else if (!isLt1M) {
           this.$message.error('上传游戏LOGO大小不能超过 1MB!')
+          this.isUploadSuccess = false
         } else if (length) {
           this.$message.error('对不起，只能上传一张图片！')
+          this.isUploadSuccess = false
         }
         return isJPG && isLt1M && !length
       }, // 上传前的检验 格式、大小等
