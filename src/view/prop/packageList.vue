@@ -97,7 +97,7 @@
         <el-form-item label="添加道具" label-width="110px">
           <el-row>
             <el-col :span="12">
-              <el-col :span="4">道具</el-col>
+              <el-col :span="4">类别</el-col>
               <el-col :span="18">
                 <el-select v-model="addToolInfo.toolName" placeholder="请选择" filterable clearable style="width: 100%">
                   <el-option v-for="item in propList" :key="item.toolName" :laber="item.toolName" :value="item.toolName"></el-option>
