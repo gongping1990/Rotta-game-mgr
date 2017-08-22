@@ -44,31 +44,31 @@ const PLAYER_DETAIL = 'playDetail'// 玩家详细数据
 const state = {
   [ISAPI]: {
     randomCaptcha: {
-      url: 'https://viwko4gvx0.execute-api.ap-southeast-1.amazonaws.com/dev/captcha',
+      url: 'https://eygelvmhnh.execute-api.ap-southeast-1.amazonaws.com/dev/captcha',
       method: 'post'
     }, // 生成验证码 captcha
     login: {
-      url: 'https://viwko4gvx0.execute-api.ap-southeast-1.amazonaws.com/dev/users/auth',
+      url: 'https://eygelvmhnh.execute-api.ap-southeast-1.amazonaws.com/dev/users/auth',
       method: 'post'
     }, // 管理员/商户/线路商登陆 users/auth
     managers: {
-      url: 'https://viwko4gvx0.execute-api.ap-southeast-1.amazonaws.com/dev/managers',
+      url: 'https://eygelvmhnh.execute-api.ap-southeast-1.amazonaws.com/dev/managers',
       method: 'get'
     }, // 线路商查询与修改 managers / managers/userID
     merchants: {
-      url: 'https://viwko4gvx0.execute-api.ap-southeast-1.amazonaws.com/dev/merchants',
+      url: 'https://eygelvmhnh.execute-api.ap-southeast-1.amazonaws.com/dev/merchants',
       method: 'get'
     }, // 一般商户查询与修改 merchants / merchants/userID
     addGame: {
-      url: 'https://e73xksjd1k.execute-api.ap-southeast-1.amazonaws.com/dev/games',
+      url: 'https://wzhe3pql3g.execute-api.ap-southeast-1.amazonaws.com/dev/games',
       method: 'post'
     }, // 新增游戏 games
     gameList: {
-      url: 'https://e73xksjd1k.execute-api.ap-southeast-1.amazonaws.com/dev/gameList',
+      url: 'https://wzhe3pql3g.execute-api.ap-southeast-1.amazonaws.com/dev/gameList',
       method: 'post'
     }, // 获取游戏列表 games/{type}
     addCompanyNew: {
-      url: 'https://e73xksjd1k.execute-api.ap-southeast-1.amazonaws.com/dev/companyNew',
+      url: 'https://wzhe3pql3g.execute-api.ap-southeast-1.amazonaws.com/dev/companyNew',
       method: 'post'
     }
   }, // API
@@ -193,7 +193,7 @@ const actions = {
       startKey: null
     }
     invoke({
-      url: 'https://e73xksjd1k.execute-api.ap-southeast-1.amazonaws.com/dev/logList',
+      url: 'https://wzhe3pql3g.execute-api.ap-southeast-1.amazonaws.com/dev/logList',
       method: api.loginList.method,
       data: checklogin
     }).then(
@@ -219,7 +219,7 @@ const actions = {
       startKey: null
     }
     invoke({
-      url: 'https://e73xksjd1k.execute-api.ap-southeast-1.amazonaws.com/dev/logList',
+      url: 'https://wzhe3pql3g.execute-api.ap-southeast-1.amazonaws.com/dev/logList',
       method: api.loginList.method,
       data: checklogin
     }).then(
