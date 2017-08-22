@@ -95,11 +95,11 @@
         }
       } // 运营商描述
       var validateCompanyEmail = (rule, value, callback) => {
-        var email = new RegExp(/^([a-zA-Z0-9_-]){1,20}@([a-zA-Z0-9_-])+(.[a-zA-Z0-9_-])+/)
+        var email = new RegExp(/^([a-zA-Z0-9_-]){1,16}@([a-zA-Z0-9_-])+(.[a-zA-Z0-9_-])+/)
         if (value === '') {
           callback(new Error('请输入邮箱'))
         } else if (!email.exec(value)) {
-          callback(new Error('邮箱格式不对，长度为2-20个字符'))
+          callback(new Error('邮箱格式不对，长度为2-16个字符'))
         } else {
           callback()
           this.isfinish.companyEmail = true

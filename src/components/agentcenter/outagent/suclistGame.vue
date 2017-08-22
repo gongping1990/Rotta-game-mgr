@@ -58,7 +58,8 @@ export default {
 .list-title p{line-height: 3rem;font-size: 1.1rem;color: #5a5a5a;}
 .list-title .title{font-size: 1.3rem;font-weight: bold;color: #5a5a5a}
 .list-bottom{text-align: right;color: #a5a5a5}
-.print-justfy1{color: #a5a5a5; padding: 1rem 0;display: inline-block}
+.print-justfy1{color: #a5a5a5; padding: 1rem 0;display: inline-block;word-break:break-all;
+;}
 /**/
 @media print {
   .Noprint { display: none }
