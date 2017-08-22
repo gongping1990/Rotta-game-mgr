@@ -51,10 +51,10 @@
             </el-tag>
           </template>
         </el-table-column>
-        <el-table-column label="备注" align="center" >
+        <el-table-column label="备注" align="center" style="word-break: break-all" >
           <template scope="scope">
             <el-popover trigger="hover" placement="bottom-start" width="250">
-              <p>{{ scope.row.remark === 'NULL!' ? '' : scope.row.remark}}</p>
+              <div class="remarkBox">{{ scope.row.remark === 'NULL!' ? '' : scope.row.remark}}</div>
               <div slot="reference" class="">
                 <el-icon name="search" style="color:#108ee9"></el-icon>
               </div>
@@ -330,6 +330,7 @@ export default {
   .input{width: 80%}
   .searchResult{padding: 1rem 2rem}
   .justfy1{margin:0 2rem;}
+  .remarkBox{word-wrap: break-word; word-break: normal;width: 250px}
   .page {padding-bottom: 2rem;text-align: right;margin-right: 1%;margin-top: 2rem}
   /*面包屑组件*/
   .title{padding: 2rem;}
