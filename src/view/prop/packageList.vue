@@ -298,6 +298,10 @@ export default {
     openModal (row = {}) {
       this.isAddProp = true
       this.isEditPackage = false
+      this.addToolInfo = {
+        toolName: '',
+        toolNum: ''
+      }
       if (JSON.stringify(row) !== '{}') {
         this.editStatus = true
         this.packageInfo = JSON.parse(JSON.stringify(row))
@@ -311,10 +315,7 @@ export default {
           content: [],
           icon: ''
         }
-        this.addToolInfo = {
-          toolName: '',
-          toolNum: ''
-        }
+        this.addToolList = []
         this.editStatus = false
       }
     },
