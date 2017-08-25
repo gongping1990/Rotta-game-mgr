@@ -319,38 +319,38 @@
         }
         return isJPG && isLt1M && !length
       }, // 上传前的检验 格式、大小等
-      handleError (err) {
-        console.log(err)
-        if (err) {
-          this.$message.error('上传失败，请重新选择')
-        }
+      handleError () {
+        this.isUploadSuccess = false
+        this.$message.error('上传失败，请重新选择')
       }, // 错误回调
       changeUpload (file, fileList) {
         console.log(fileList, 'change')
-        this.isUploadSuccess = true
-        invoke({
-          url: api.getUploadImgToken.url,
-          method: api.getUploadImgToken.method,
-          data: {
-            fileKey: file.name
-          }
-        }).then(res => {
-          const [err, ret] = res
-          if (err) {
-            this.$message({
-              message: err.response.data.err.msg,
-              type: 'error'
-            })
-          } else {
-            this.form = {
-              key: file.name,
-              token: ret.data.payload
+        if (file.status === 'ready') {
+          this.isUploadSuccess = true
+          invoke({
+            url: api.getUploadImgToken.url,
+            method: api.getUploadImgToken.method,
+            data: {
+              fileKey: file.name
             }
-          }
-        })
-        setTimeout(() => {
-          this.$refs.upload.submit() // 延迟提交， 这里主要是针对data传送参数异步问题，用延迟暂时解决
-        }, 2000)
+          }).then(res => {
+            const [err, ret] = res
+            if (err) {
+              this.$message({
+                message: err.response.data.err.msg,
+                type: 'error'
+              })
+            } else {
+              this.form = {
+                key: file.name,
+                token: ret.data.payload
+              }
+            }
+          })
+          setTimeout(() => {
+            this.$refs.upload.submit() // 延迟提交， 这里主要是针对data传送参数异步问题，用延迟暂时解决
+          }, 2000)
+        }
       }, // 改变文件回调
       removeImg (fileList) {
         if (fileList && !fileList.length) {

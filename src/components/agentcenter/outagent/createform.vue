@@ -237,16 +237,11 @@
           }
         })
         if (this.isfinish.companyName === false || this.isfinish.companyEmail === false || this.isfinish.companyDesc === false ||
-          this.isfinish.companyContactWay === false || this.isfinish.remark === false ||
-          this.isfinish.companyContact === false || !this.managerInfo.companyRegion) {
+          this.isfinish.companyContactWay === false || this.isfinish.remark === false || this.isfinish.companyContact === false) {
           this.$message({
             message: '请完善创建信息',
             type: 'error'
           })
-        } else if (!this.managerInfo.companyContract) {
-          this.$message.error('请上传合同文件')
-        } else if (!this.managerInfo.license) {
-          this.$message.error('请上传营业执照照片')
         } else {
           this.$store.commit('startLoading')
           invoke({
