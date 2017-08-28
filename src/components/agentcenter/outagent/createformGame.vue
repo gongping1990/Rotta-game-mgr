@@ -1,7 +1,8 @@
 <template>
-  <div class="outcreate">
+  <div class="outcreate" v-loading.body="dialogLoading" element-loading-text="上传中，请稍等">
     <h2 class="title">游戏基本信息</h2>
-    <el-form :model="managerInfo" :rules="rules" ref="managerInfo" class="createform" label-width="150px" label-position="right">
+    <el-form :model="managerInfo" :rules="rules" ref="managerInfo" class="createform" label-width="150px"
+             label-position="right">
       <el-form-item label="游戏名称" prop="gameName">
         <el-input v-model="managerInfo.gameName" class="input" type="text" placeholder="请输入" :maxlength='20'></el-input>
       </el-form-item>
@@ -34,7 +35,6 @@
           :on-error="handleError"
           :before-upload="beforeUpload"
           :on-change='changeUpload'
-          :on-remove="removeImg"
           :auto-upload="false"
           :data="form">
           <img v-if="managerInfo.gameImg" :src="managerInfo.gameImg" class="avatar">
@@ -205,7 +205,8 @@
         }, // 列表验证规则
         options: [],
         fileList: [],
-        form: {}
+        form: {},
+        dialogLoading: false
       }
     },
     computed: {
@@ -294,33 +295,33 @@
         })
       },
       handleSuccess (response, file, fileList) {
+        this.dialogLoading = false
         this.$message.success('图片上传成功')
         this.fileList = fileList
-        this.$store.commit('closeLoading')
         this.managerInfo.gameImg = `http://ouef62ous.bkt.clouddn.com/${response.key}`
       }, // 图片上传成功回调
       beforeUpload (file) {
         console.log(file, 'beforeUpload')
-        this.$store.commit('startLoading')
         const isJPG = (file.type === 'image/jpeg') || (file.type === 'image/png')
         const isLt1M = file.size / 1024 / 1024 < 1
         console.log(isJPG, isLt1M)
         if (!isJPG) {
-          this.$store.commit('closeLoading')
+          this.dialogLoading = false
           this.$message.error('上传头像图片只能是 JPG或者PNG 格式!')
         } else if (!isLt1M) {
-          this.$store.commit('closeLoading')
+          this.dialogLoading = false
           this.$message.error('上传游戏LOGO大小不能超过 1MB!')
         }
         return isJPG && isLt1M
       }, // 上传前的检验 格式、大小等
       handleError () {
+        this.dialogLoading = false
         this.$message.error('上传失败，请重新选择')
-        this.$store.commit('closeLoading')
       }, // 错误回调
       changeUpload (file, fileList) {
         console.log(fileList, 'change')
         if (file.status === 'ready') {
+          this.dialogLoading = true
           invoke({
             url: api.getUploadImgToken.url,
             method: api.getUploadImgToken.method,
@@ -345,12 +346,7 @@
             this.$refs.upload.submit() // 延迟提交， 这里主要是针对data传送参数异步问题，用延迟暂时解决
           }, 2000)
         }
-      }, // 改变文件回调
-      removeImg (fileList) {
-        if (fileList && !fileList.length) {
-          this.isUploadSuccess = false
-        }
-      } // 移除回调
+      } // 改变文件回调
     }
   }
 </script>
