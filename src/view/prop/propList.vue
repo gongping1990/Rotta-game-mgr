@@ -18,6 +18,7 @@
         </el-col>
         <el-col :span="4">
           <el-button type="primary" @click="startSearch">搜索</el-button>
+          <el-button @click="resetSearch">重置</el-button>
         </el-col>
       </el-row>
     </div>
@@ -167,6 +168,7 @@ export default {
             })
           } else {
             this.propList = res.data.payload
+            this.searchArray = res.data.payload
           }
           this.$store.commit('closeLoading')
         }
@@ -287,25 +289,31 @@ export default {
     },
     startSearch () {
       let {toolId, toolName} = this.searchInfo
+      this.propListLocal = JSON.parse(JSON.stringify(this.searchArray))
       if ((!toolId && !toolName)) {
         this.searchArray = []
         this.getPropList()
       } else if (toolName && toolId) {
-        this.propList = this.propList.filter(item => {
+        this.propList = this.propListLocal.filter(item => {
           return (item.toolName === this.searchInfo.toolName && item.toolId === this.searchInfo.toolId)
         })
       } else {
         if (toolName) {
-          this.propList = this.propList.filter(item => {
+          this.propList = this.propListLocal.filter(item => {
             return item.toolName === this.searchInfo.toolName
           })
         } else if (toolId) {
-          this.propList = this.propList.filter(item => {
+          this.propList = this.propListLocal.filter(item => {
             return item.toolId === this.searchInfo.toolId
           })
         }
       }
     }, // 控制搜索条件
+    resetSearch () {
+      this.searchInfo = {}
+      this.searchArray = []
+      this.getPropList()
+    },
     getAtime (row, col) {
       var now = new Date(parseFloat(row.createdAt))
       var formatprev = dateformat(now, 'isoDate')

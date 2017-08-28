@@ -21,6 +21,19 @@
           <el-col :span="8">
             <span>运营商描述: {{gameDetail.companyDesc == 'NULL!' ? '暂无' : gameDetail.companyDesc}}</span>
           </el-col>
+          <el-col :span="8">
+            <span>
+              合同信息: <a style="text-decoration:none" :href=gameDetail.companyContract v-if="gameDetail.companyContract != 'NULL!'">下载</a>
+              <a v-else>暂无</a>
+            </span>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="8">
+            <span>执照信息: <img :src="gameDetail.license" style="width: 100% ;margin-top: 1rem" v-if="gameDetail.license != 'NULL!'">
+              <a v-else>暂无</a>
+            </span>
+          </el-col>
         </el-row>
       </div>
     </div>

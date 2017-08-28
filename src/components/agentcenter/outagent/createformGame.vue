@@ -27,22 +27,20 @@
       <el-form-item label="游戏LOGO" prop="gameImg">
         <el-upload
           action="//upload.qiniu.com"
-          list-type="picture-card"
+          class="g-avatar-uploader"
           ref="upload"
+          :show-file-list="false"
           :on-success="handleSuccess"
           :on-error="handleError"
           :before-upload="beforeUpload"
           :on-change='changeUpload'
           :on-remove="removeImg"
           :auto-upload="false"
-          :disabled="isUploadSuccess"
           :data="form">
-          <i class="el-icon-plus"></i>
-          <div slot="tip" class="el-upload__tip">只能上传一张jpg/png文件，且不超过1M</div>
+          <img v-if="managerInfo.gameImg" :src="managerInfo.gameImg" class="avatar">
+          <i v-else class="el-icon-plus avatar-uploader-icon"></i>
         </el-upload>
-        <!--<el-dialog size="tiny">-->
-          <!--<img width="100%" :src="managerInfo.gameImg" alt="">-->
-        <!--</el-dialog>-->
+        <div class="el-upload__tip">只能上传一张jpg/png文件，且不超过1M</div>
       </el-form-item>
       <el-form-item label="服务器" prop="ip">
         <el-input v-model="managerInfo.ip" class="input" placeholder="请输入 （如：xxx.xxx.xxx.xxx）"></el-input>
@@ -207,8 +205,7 @@
         }, // 列表验证规则
         options: [],
         fileList: [],
-        form: {},
-        isUploadSuccess: false
+        form: {}
       }
     },
     computed: {
@@ -297,36 +294,33 @@
         })
       },
       handleSuccess (response, file, fileList) {
-        this.isUploadSuccess = true
+        this.$message.success('图片上传成功')
         this.fileList = fileList
+        this.$store.commit('closeLoading')
         this.managerInfo.gameImg = `http://ouef62ous.bkt.clouddn.com/${response.key}`
       }, // 图片上传成功回调
       beforeUpload (file) {
         console.log(file, 'beforeUpload')
+        this.$store.commit('startLoading')
         const isJPG = (file.type === 'image/jpeg') || (file.type === 'image/png')
         const isLt1M = file.size / 1024 / 1024 < 1
-        const length = this.fileList.length > 1
         console.log(isJPG, isLt1M)
         if (!isJPG) {
+          this.$store.commit('closeLoading')
           this.$message.error('上传头像图片只能是 JPG或者PNG 格式!')
-          this.isUploadSuccess = false
         } else if (!isLt1M) {
+          this.$store.commit('closeLoading')
           this.$message.error('上传游戏LOGO大小不能超过 1MB!')
-          this.isUploadSuccess = false
-        } else if (length) {
-          this.$message.error('对不起，只能上传一张图片！')
-          this.isUploadSuccess = false
         }
-        return isJPG && isLt1M && !length
+        return isJPG && isLt1M
       }, // 上传前的检验 格式、大小等
       handleError () {
-        this.isUploadSuccess = false
         this.$message.error('上传失败，请重新选择')
+        this.$store.commit('closeLoading')
       }, // 错误回调
       changeUpload (file, fileList) {
         console.log(fileList, 'change')
         if (file.status === 'ready') {
-          this.isUploadSuccess = true
           invoke({
             url: api.getUploadImgToken.url,
             method: api.getUploadImgToken.method,
@@ -370,5 +364,4 @@
   .select-width{max-width: 336px}
   .title{font-weight: normal;color: #5a5a5a;margin: 1rem 0 2rem 0;text-align: center;margin-left: -30rem}
   .stepbtn{text-align: center}
-  .img-upload .el-upload-list--picture-card{width: 20px}
 </style>
