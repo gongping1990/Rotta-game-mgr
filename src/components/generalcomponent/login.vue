@@ -129,12 +129,6 @@
             type: 'error'
           })
           this.loading = false
-        } else if (this.userinfo.captcha.toString() !== this.userinfo.copyCode.toString()) {
-          this.$message({
-            message: '验证码错误!',
-            type: 'error'
-          })
-          this.loading = false
         } else {
           var result = this.userinfo
           delete result.copyCode
