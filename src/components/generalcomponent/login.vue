@@ -10,12 +10,11 @@
         </el-form-item>
         <el-form-item label="密码" class="justfy2" prop="password">
           <el-input type="password" class="input" placeholder="请输入" v-model="userinfo.password" :maxlength='16'></el-input>
-          <div class="el-form-item__error" v-if="pwdSmall">密码强度弱</div>
         </el-form-item>
         <el-form-item label="验证码" prop="captcha">
           <el-input class="input codeInput" placeholder="请输入" v-model="userinfo.captcha"></el-input>
           <!--<a href="#" class="getBtn" v-if="isgetCode === false" @click="changGetcode($event,true)">获取验证码</a>-->
-          <div class="code-imgbox" @click="changGetcode">
+          <div class="code-imgbox" @click="changGetcode" v-loading="codeFetching">
             <el-button class="code-btn" type="text" v-if="!userinfo.copyCode">获取验证码</el-button>
             <img v-else class="code-img" :src="userinfo.copyCode">
           </div>
@@ -45,8 +44,6 @@
         }
       } // 验证用户名
       var checkPasswords = (rule, value, callback) => {
-        var pwd = /(?=.*[a-zA-Z])(?=.*[\d])[\w\W]{6,16}/
-        var reg = new RegExp(pwd)
         if (value === '') {
           this.pwdSmall = false
           callback(new Error('密码不能为空'))
@@ -56,9 +53,6 @@
         } else if (value.length >= 15) {
           this.pwdSmall = false
           callback(new Error('密码不能多于16位'))
-        } else if (!reg.exec(value)) {
-          this.pwdSmall = false
-          callback(new Error('密码中必须包含大写字母、小写字母、数字、符号，中任意三种的组合'))
         } else {
           this.pwdSmall = value.length < 10
           callback()
@@ -93,17 +87,20 @@
           password: '',
           captcha: '',
           copyCode: ''
-        }
+        },
+        codeFetching: false
       }
     },
     mounted: function () {
     },
     methods: {
       changGetcode () {
+        if (this.codeFetching) return
         var forCode = {}
         forCode.usage = 'login'
         forCode.relKey = 'Platform_' + this.userinfo.username
         // console.log('获取验证码的传递数据是: ', forCode)
+        this.codeFetching = true
         invoke({
           url: this.$store.state.isapi.randomCaptcha.url,
           method: this.$store.state.isapi.randomCaptcha.method,
@@ -112,9 +109,11 @@
           result => {
             const [err, ret] = result
             if (err) {
+              this.codeFetching = false
             } else {
               var code = ret.data.payload
               // console.log('验证码是:', code)
+              this.codeFetching = false
               this.userinfo.copyCode = `data:image/png;base64,${code}`
             }
           }
@@ -131,7 +130,6 @@
           this.loading = false
         } else {
           var result = this.userinfo
-          delete result.copyCode
           this.$store.commit({
             type: 'getLogin',
             data: result
