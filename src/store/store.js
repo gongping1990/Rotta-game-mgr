@@ -41,6 +41,7 @@ const GET_SEARCH_OPERATOR = 'getSearchOperator' // 获取游戏商搜索条件
 const GET_SEARCH_GAME = 'getSearchGame' // 获取游戏的搜索条件
 const OPERATOR_LIST = 'operatorList' // 游戏商列表数据
 const PLAYER_DETAIL = 'playDetail'// 玩家详细数据
+const SEARCH_OLD = 'searchOld'// 存储搜索信息
 const state = {
   [ISAPI]: {
     randomCaptcha: {
@@ -121,7 +122,8 @@ const state = {
   [GET_SEARCH_OPERATOR]: [], // 获取游戏商搜索
   [GET_SEARCH_GAME]: [], // 获取游戏搜索
   [OPERATOR_LIST]: [], // 获取游戏搜索
-  [PLAYER_DETAIL]: [] // 玩家详细
+  [PLAYER_DETAIL]: [], // 玩家详细
+  [SEARCH_OLD]: [] // 搜索存储
 } // 定义所有初始状态
 const actions = {
   getOperatorList (context) {
@@ -135,6 +137,10 @@ const actions = {
         if (err) {
           context.commit('closeLoading')
         } else {
+          context.commit({
+            type: 'searchOld',
+            data: ret.data.payload.Items
+          })
           context.commit({
             type: 'getOperatorData',
             data: ret.data.payload.Items
@@ -179,6 +185,10 @@ const actions = {
           console.log('游戏列表数据是:', gameList)
           context.commit({
             type: 'getallGamelist',
+            data: gameList
+          })
+          context.commit({
+            type: 'searchOld',
             data: gameList
           })
           context.commit('closeLoading')
@@ -362,6 +372,7 @@ const mutations = {
     }
   }, // 清空搜索条件
   outlistSearch (state) {
+    state[[OPERATOR_LIST]] = state[[SEARCH_OLD]]
     if (state[[GET_SEARCH_OPERATOR]].companyContactWay !== '') {
       state[[OPERATOR_LIST]] = state[[OPERATOR_LIST]].filter(item => {
         return item.companyContactWay === state[[GET_SEARCH_OPERATOR]].companyContactWay
@@ -383,13 +394,14 @@ const mutations = {
     // console.log('返回符合搜索条件的数据:', state[[OUTLISTSEARCH]])
   }, // 搜索游戏商数据
   gamelistSearch (state, payload) {
+    state[[GAMELIST]] = state[[SEARCH_OLD]]
     if (state[[GET_SEARCH_GAME]].gameName !== '') {
       state[[GAMELIST]] = state[[GAMELIST]].filter(item => {
         return item.gameName === state[[GET_SEARCH_GAME]].gameName
       })
     } else if (state[[GET_SEARCH_GAME]].company !== '') {
       state[[GAMELIST]] = state[[GAMELIST]].filter(item => {
-        return item.company === state[[GET_SEARCH_GAME]].company
+        return item.company.companyName === state[[GET_SEARCH_GAME]].company
       })
     } else if (state[[GET_SEARCH_GAME]].Email !== '') {
       state[[GAMELIST]] = state[[GAMELIST]].filter(item => {
@@ -421,6 +433,10 @@ const mutations = {
   playerDetail (state, payload) {
     state[PLAYER_DETAIL] = payload.data
     console.log(state[PLAYER_DETAIL], '玩家详细')
+  },
+  searchOld (state, payload) {
+    state[SEARCH_OLD] = payload.data
+    console.log(state[SEARCH_OLD], '玩家详细')
   }
 } // 同步调用,更改state
 const getters = {
