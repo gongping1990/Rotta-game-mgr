@@ -60,7 +60,7 @@ export const api = {
     method: 'post'
   }, // 获取游戏类型
   getSign: {
-    url: 'https://viwko4gvx0.execute-api.ap-southeast-1.amazonaws.com/dev/game/sign',
+    url: 'https://eygelvmhnh.execute-api.ap-southeast-1.amazonaws.com/dev/game/sign',
     method: 'post'
   }, // 获取签名
   getUploadImgToken: {
