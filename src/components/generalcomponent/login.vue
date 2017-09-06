@@ -21,7 +21,7 @@
         </el-form-item>
         <el-form-item class="justfy3">
           <el-button @click="onSubmit" class="justfy1" :loading="loading">登录</el-button>
-          <el-button @click="forgetPassword" >忘记密码</el-button>
+          <!--<el-button @click="forgetPassword" >忘记密码</el-button>-->
         </el-form-item>
       </el-form>
     </div>
@@ -183,7 +183,7 @@
 .codeInput{width:120px;overflow: auto;float: left}
 .code-img{width:100%; height: 34px;border: 1px solid #eee; border-radius: 2px}
 .code-btn{text-align: center;width: 100%}
-.justfy1{margin-right: 11rem;}
+.justfy1{width: 20rem;margin-left: 4.5rem;}
 .justfy2{margin-left: 1.2rem;}
 .justfy3{}
 /**/
